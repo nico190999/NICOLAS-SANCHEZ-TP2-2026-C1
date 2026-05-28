@@ -9,8 +9,14 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   //CORS
-  app.enableCors({origin:"*"})
+  /* app.enableCors({origin:"*"}) */
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 4200);
 }
 bootstrap();
+
+/* 
+
+Una vez creados los resource, realizar el dto y entities. Luego autenticacion.service y autenticacion.module
+
+*/
