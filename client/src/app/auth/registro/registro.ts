@@ -58,7 +58,7 @@ export default class Registro {
   }
 
   this.http.post(
-    'http://localhost:3000/registro',
+    'https://nicolas-sanchez-tp-2-2026-c1-server.vercel.app/registro',
     this.formulario.value
   )
   .subscribe({
