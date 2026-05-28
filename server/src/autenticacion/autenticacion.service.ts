@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 export class AutenticacionService {
 
   constructor(
-    @InjectModel('Usuario') private UsuarioModel : Model<UsuarioRegistro>,
+    @InjectModel(UsuarioRegistro.name) private UsuarioModel : Model<UsuarioRegistro>,
   ) {}
 
   async create(createAutenticacionDto: CreateAutenticacionDto) {

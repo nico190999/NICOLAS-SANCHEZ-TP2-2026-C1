@@ -25,7 +25,13 @@ export class UsuarioRegistro {
     repetirContrasenia: string
 
     @Prop()
+    fechaNacimiento: string
+
+    @Prop()
     descripcionBreve: string
+
+    @Prop()
+    perfil: string
 
 
 }
@@ -42,7 +48,9 @@ export const UsuarioSchema = SchemaFactory.createForClass(UsuarioRegistro);
     "nombreDeUsuario":,
     "contrasenia":,
     "repetirContrasenia":,
-    "descripcionBreve":
+    "fechaNacimiento":,
+    "descripcionBreve":,
+    "perfil":
 }
 
 */

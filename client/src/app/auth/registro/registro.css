@@ -1,0 +1,106 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 350px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+/* Título */
+.title {
+    font-size: 20px;
+    color: royalblue;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Texto inferior */
+.signin {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.signin a {
+    color: royalblue;
+}
+
+/* LABEL */
+.form label {
+    position: relative;
+    display: block;
+}
+
+/* INPUT BASE */
+.form label .input {
+    width: 100%;
+    padding: 12px 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+/* FOCUS */
+.form label .input:focus {
+    border-color: #4fc3f7;
+}
+
+/* TEXTO FLOTANTE */
+.form label span {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    color: gray;
+    font-size: 13px;
+    transition: 0.2s;
+    pointer-events: none;
+}
+
+/* Animación label */
+.form label .input:focus + span,
+.form label .input:not(:placeholder-shown) + span {
+    top: -8px;
+    font-size: 11px;
+    background: white;
+    padding: 0 4px;
+}
+
+/* ✅ INPUT ERROR */
+.input.error {
+    border-color: #ff4d4d;
+    background-color: #fff5f5;
+}
+
+/* TEXTO ERROR */
+.error-text {
+    color: #ff4d4d;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* BOTÓN */
+.submit {
+    border: none;
+    background-color: royalblue;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.submit:hover {
+    background-color: rgb(56, 90, 194);
+}
+
+.submit:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}

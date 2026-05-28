@@ -21,6 +21,14 @@ export class CreateAutenticacionDto {
     repetirContrasenia: string
 
     @IsString()
+    fechaNacimiento: string
+
+    @IsString()
     descripcionBreve: string
+
+    @IsString()
+    perfil: string
+
+    /* Imagenperfil llega por separado */
 
 }
