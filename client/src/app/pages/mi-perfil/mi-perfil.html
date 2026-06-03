@@ -1,1 +1,47 @@
-<p>mi-perfil works!</p>
+<div class="personal-info">
+
+    <p>{{usuario.nombreDeUsuario}}</p>
+
+    <p>{{ usuario.nombre }}</p>
+    <p>{{usuario.apellido}}</p>
+
+    <p>{{usuario.fechaNacimiento}}</p>
+
+    <p>{{usuario.descripcionBreve}}</p>
+
+</div>
+
+@if (!this.crearPublicacionFlag) {
+
+<div>
+    <button (click)="habilitarFormularioDePublicacion()">Crear Publicación</button>
+</div>
+
+<div>
+    <p>Aquí iran mis Publicaciones</p>
+</div>
+}@else {
+    <form [formGroup]="formulario" (ngSubmit)="crearNuevaPublicacion()">
+
+        <label>
+            <input 
+            type="text"
+            formControlName="contenido"
+            >
+            <span>Contenido</span>
+        </label>
+
+        <label>
+            <input 
+            type="text"
+            formControlName="descripcion"
+            >
+            <span>Descripcion</span>
+        </label>
+
+        <button [disabled]="!formulario.valid" type="submit" class="submit">Publicar</button>
+
+    </form>
+
+    <button (click)="deshabilitarFormularioDePublicacion()">Volver</button>
+}

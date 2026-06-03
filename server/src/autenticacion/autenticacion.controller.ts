@@ -1,23 +1,43 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AutenticacionService } from './autenticacion.service';
 import { CreateAutenticacionDto } from './dto/create-autenticacion.dto';
+import { LoginAutenticacionDto } from './dto/login-autenticacion.dto';
 /* import { UpdateAutenticacionDto } from './dto/update-autenticacion.dto'; */
 
-@Controller('registro')
+@Controller('auth')
 export class AutenticacionController {
   constructor(private readonly autenticacionService: AutenticacionService) {}
 
-  @Post()
+  @Post('registro')
   create(@Body() createAutenticacionDto: CreateAutenticacionDto) {
-    return this.autenticacionService.create(createAutenticacionDto);
+    return this.autenticacionService.registro(createAutenticacionDto);
   }
 
-  @Get()
+  @Post('login')
+  login(@Body() loginDto: LoginAutenticacionDto){
+    return this.autenticacionService.login(loginDto);
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+/* 
+
+@Get()
   findAll() {
     return this.autenticacionService.findAll();
   }
 
-  /* @Get(':id')
+
+@Get(':id')
   findOne(@Param('id') id: string) {
     return this.autenticacionService.findOne(+id);
   } */
@@ -31,4 +51,4 @@ export class AutenticacionController {
   remove(@Param('id') id: string) {
     return this.autenticacionService.remove(+id);
   } */
-}
+

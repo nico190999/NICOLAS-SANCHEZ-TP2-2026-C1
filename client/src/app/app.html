@@ -1,16 +1,21 @@
-<div class="auth-bar">
+@if(!this.authService.logueoExitoso){
+  <div class="auth-bar">
 
   <button routerLink="auth/login">Login</button>
   <button routerLink="auth/registrarse">Registrarse</button>
 
 </div>
+}
 
+@if (this.authService.logueoExitoso){
 <div class="navigation-bar">
 
   <button routerLink="publicaciones">Publicaciones</button>
-  <button routerLink="miPerfil">Mi perfil</button>
+  <button [routerLink]="['/perfil', authService.usuarioLogueado.usuario._id]">Mi perfil</button>
+  <button (click)="cerrarSesion()">Cerrar sesion</button>
 
 </div>
+}
 
 <div>
   <router-outlet></router-outlet>

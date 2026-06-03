@@ -32,17 +32,12 @@ export default class Registro {
 
     descripcionBreve: new FormControl("", Validators.required),
 
-    imagenPerfil: new FormControl(null),
-
-    perfil: new FormControl('usuario')
-
   })
 
   usuarioYaRegistrado = false;
   registroExitoso = false;
 
 
-  cdr = inject(ChangeDetectorRef);
 
   contraseniasCoinciden(): boolean {
     return (
@@ -51,31 +46,42 @@ export default class Registro {
     );
   }
 
-  registrar(){
+  registrar() {
+
+    //PARA QUE FUNCIONE EL REGISTRO SE DEBE HACER "NEST START" DEL LADO DEL SERVIDOR
+
+    // Si hay errores en el formularios, hace marcar los mismos
     if (this.formulario.invalid) {
-    this.formulario.markAllAsTouched();
-    return;
-  }
-
-  this.http.post(
-    'http://localhost:3000/registro',
-    this.formulario.value
-  )
-  .subscribe({
-
-    next: (respuesta) => {
-
-      console.log('Usuario registrado');
-      console.log(respuesta);
-
-      this.registroExitoso = true;
-    },
-
-    error: (error) => {
-
-      console.log(error);
+      this.formulario.markAllAsTouched();
+      return;
     }
-  });
+
+    //Realiza petición de tipo POST, y se le envian los valores del formulario (this.formulario.value)
+    this.http.post(
+      'http://localhost:3000/auth/registro', /* La URL debe coincidir con la del controlador (autenticacion.controller.ts en @Controller("La ruta")). 
+    Para vercel usar https://nicolas-sanchez-tp-2-2026-c1-server.vercel.app/auth/registro.
+    Para servidor local usar http://localhost:3000/registro (SE TIENE QUE INICIALIZAR NEST EN EL SERVIDOR MEDIANTE "nest start")
+    */
+      this.formulario.value
+    )
+      //En cuanto llegue la respuesta llegue, se ejecuta el subscribe
+      .subscribe({
+
+        //Si sale todo bien se ejecuta el next
+        next: (respuesta) => {
+
+          console.log('Se registro el Usuario en MongoDB. A continuación se ejecuta la respuesta');
+          console.log(respuesta); //Imprime el return de autenticacion.service.ts. Después se debe eliminar
+
+
+          this.registroExitoso = true;
+        },
+
+        error: (error) => {
+
+          console.log(error);
+        }
+      });
   }
 
 }

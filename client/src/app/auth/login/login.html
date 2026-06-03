@@ -1,4 +1,4 @@
-<form class="form">
+<form class="form" [formGroup]="formulario" (ngSubmit)="login()">
     <p class="title">Iniciar Sesión </p>
             
     <label>
@@ -7,7 +7,7 @@
         placeholder="" 
         type="email" 
         class="input"
-        formControlName="email">
+        formControlName="correo">
         <span>Email</span>
     </label> 
         
@@ -17,9 +17,10 @@
         placeholder="" 
         type="password" 
         class="input"
-        formControlName="password"
+        formControlName="contrasenia"
         >
         <span>Contraseña</span>
     </label>
+    <button (click)="loginRapido()">Login Rapido</button>
     <button type="submit" class="submit">Iniciar Sesión</button>
 </form>

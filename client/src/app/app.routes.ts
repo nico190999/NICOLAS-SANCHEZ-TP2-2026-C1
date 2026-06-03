@@ -12,7 +12,7 @@ export const routes: Routes = [
         loadComponent: () =>import("./auth/registro/registro")
     },
     {
-        path:"miPerfil",
+        path:"perfil/:id",
         loadComponent: () =>import("./pages/mi-perfil/mi-perfil")
     },
     {

@@ -3,7 +3,9 @@ import { Prop } from "@nestjs/mongoose";
 import { SchemaFactory } from "@nestjs/mongoose";
 
 @Schema()
-/* Se definen los atributos de la clase */
+/* Se definen los atributos de la clase
+DEFINE LOS CAMPOS QUE SE VAN A GUARDAR EN MONGODB
+*/
 export class UsuarioRegistro {
 
     @Prop()
@@ -22,17 +24,13 @@ export class UsuarioRegistro {
     contrasenia: string
 
     @Prop()
-    repetirContrasenia: string
-
-    @Prop()
     fechaNacimiento: string
 
     @Prop()
     descripcionBreve: string
 
-    @Prop()
+    @Prop({default: "usuario"}) /* Deja asignado un valor por defecto */
     perfil: string
-
 
 }
 
@@ -47,7 +45,6 @@ export const UsuarioSchema = SchemaFactory.createForClass(UsuarioRegistro);
     "correo":,
     "nombreDeUsuario":,
     "contrasenia":,
-    "repetirContrasenia":,
     "fechaNacimiento":,
     "descripcionBreve":,
     "perfil":

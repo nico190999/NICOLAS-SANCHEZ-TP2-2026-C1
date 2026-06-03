@@ -1,0 +1,147 @@
+El camino para hacer las  de registro es: 
+
+1) Angular -> en el metodo registar() de registrar.ts hace el llamado a la ruta del controlador de autenticacion.controller.ts
+
+2) En el controlador cuando llegue un metodo POST a "/registro" ejecuta create(@Body() createAutenticacionDto: CreateAutenticacionDto). El create lo que hace es extraer el Body del json. El body se convierte en createAutenticacionDto, el DTO define la estructura de como lo debe recibir(LEER MÁS A FONDO)
+
+3) El controller llama al servicio (que se encarga de la lógica), this,usuarioModel viene de la representación de como se subira en mongo de la clase UsuarioRegistro (ubicado en usuario.registro.schema). El .create hace un insert en MongoDB
+
+4) MongoDB guarda el documento en la colección usuarioregistros
+
+Sintesís: 
+
+Angular (registro.ts)
+
+controller(la estructura que toma esta definida en createAutenticacionDto)
+
+servicio(toma los atributos de usuario.registro.schema para definir como se sube a mongo) 
+
+MongoDB
+
+Si sale todo bien volver a next:(respuesta)=> en angular. Ahí ejecuta la rta que querramos
+
+
+
+
+
+Intercomunicación TS -> HTML 
+
+1.Interpolación {{ }}
+
+Se usa para mostrar texto en el HTML.
+
+TS:
+nombre = "Nicolas";
+edad = 25;
+
+HTML:
+<h1>{{ nombre }}</h1>
+<p>{{ edad }}</p>
+
+Resultado:
+
+<h1>Nicolas</h1>
+<p>25</p>
+
+También permite expresiones simples:
+
+<p>{{ edad + 1 }}</p>
+<p>{{ nombre.toUpperCase() }}</p>
+
+
+
+2. Property Binding [ ]
+
+Se usa para asignar valores a atributos o propiedades de elementos HTML.
+
+TS:
+imagen = "foto.jpg";
+habilitado = true;
+
+HTML:
+<img [src]="imagen">
+<button [disabled]="habilitado">Guardar</button>
+
+Angular evalúa la expresión del TS y asigna el resultado a la propiedad HTML.
+
+
+
+
+3. Event Binding ( )
+
+Permite que el HTML ejecute métodos del TS.
+
+
+TS:
+saludar() {
+  console.log("Hola");
+}
+
+HTML:
+<button (click)="saludar()">Saludar</button>
+
+Cuando haces clic, se ejecuta el método.
+
+
+
+4. Two-Way Binding [( )]
+
+Sincroniza HTML ↔ TS.
+TS:
+nombre = "";
+
+HTML:
+<input [(ngModel)]="nombre">
+
+<p>{{ nombre }}</p>
+
+Al escribir en el input, la variable cambia automáticamente.
+
+Necesitas importar FormsModule.
+
+
+
+
+
+5. Directivas estructurales (@if, @for)
+
+Muestran u ocultan contenido según variables del TS.
+
+logueado = true;
+@if(logueado){
+  <p>Bienvenido</p>
+}
+
+o
+
+comentarios = ["Hola", "Buen post"];
+@for(comentario of comentarios; track $index){
+  <p>{{ comentario }}</p>
+}
+
+
+
+
+6. Class Binding
+
+Agregar o quitar clases CSS dinámicamente.
+
+esAdmin = true;
+<p [class.admin]="esAdmin">
+  Usuario
+</p>
+
+Si esAdmin es true, Angular agrega la clase admin.
+
+
+
+
+
+7. Style Binding
+
+Modificar estilos desde el TS.
+
+color = "red";
+<p [style.color]="color">
+  Texto rojo
+</p>

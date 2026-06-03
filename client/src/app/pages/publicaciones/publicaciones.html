@@ -1,1 +1,38 @@
-<p>publicaciones works!</p>
+<div>
+
+    @for(publicacion of publicaciones; track $index){
+
+        <app-publicacion
+            [idUsuario]="publicacion.idUsuario"
+            [nombreDeUsuario]="publicacion.nombreDeUsuario"
+            [contenido]="publicacion.contenido"
+            [fecha]="publicacion.fecha"
+            [likes]="publicacion.likes.length"
+            [descripcion]="publicacion.descripcion"
+            [comentarios]="publicacion.comentarios.length">
+        </app-publicacion>
+
+    }
+
+</div>
+
+
+<div class="paginacion">
+
+    @if(paginaActual > 1){
+        <button (click)="paginaAnterior()">
+            Página anterior
+        </button>
+    }
+
+    <span>
+        Página {{paginaActual}}
+    </span>
+
+    @if(hayPaginaSiguiente()){
+        <button (click)="siguientePagina()">
+            Página siguiente
+        </button>
+    }
+
+</div>
