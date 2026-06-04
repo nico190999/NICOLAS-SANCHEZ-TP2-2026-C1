@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { PublicacionesService } from '../../auth/services/publicaciones-service';
 import { Publicacion } from './publicacion/publicacion';
 import { ChangeDetectorRef } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-publicaciones',
@@ -11,6 +12,8 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export default class PublicacionesComponent {
 
+  
+
   paginaActual = 1;
   limit = 3;
   orden = 'fecha';
@@ -19,12 +22,11 @@ export default class PublicacionesComponent {
   total = 0;
 
   constructor(
-    private publicacionesService: PublicacionesService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
-    console.log("Entré a publicaciones")
     this.cargarPublicaciones();
   }
 
@@ -32,16 +34,14 @@ export default class PublicacionesComponent {
 
     const offset = (this.paginaActual - 1) * this.limit;
 
-    this.publicacionesService.obtenerPublicaciones(offset,this.limit,this.orden)
+    this.http.get(`${environment.apiUrl}/publicaciones?offset=${offset}&limit=${this.limit}&orden=${this.orden}`)
       .subscribe({
         next: (resp: any) => {
 
           console.log("RESPUESTA", resp);
-          console.log(resp);
 
           this.publicaciones = resp.publicaciones;
           this.total = resp.total;
-          console.log(this.publicaciones)
 
           this.cdr.detectChanges();
 
@@ -54,20 +54,14 @@ export default class PublicacionesComponent {
   }
 
   siguientePagina() {
-
     this.paginaActual++;
-
     this.cargarPublicaciones();
   }
 
   paginaAnterior() {
-
     if (this.paginaActual > 1) {
-
       this.paginaActual--;
-
       this.cargarPublicaciones();
-
     }
   }
 

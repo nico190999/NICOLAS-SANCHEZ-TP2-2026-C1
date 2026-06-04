@@ -1,13 +1,15 @@
-<div>
+<div class="contenedor-publicaciones">
 
     @for(publicacion of publicaciones; track $index){
 
         <app-publicacion
+            [idPublicacion]="publicacion._id"
             [idUsuario]="publicacion.idUsuario"
             [nombreDeUsuario]="publicacion.nombreDeUsuario"
             [contenido]="publicacion.contenido"
             [fecha]="publicacion.fecha"
             [likes]="publicacion.likes.length"
+            [usuariosLikes]="publicacion.likes"
             [descripcion]="publicacion.descripcion"
             [comentarios]="publicacion.comentarios.length">
         </app-publicacion>
@@ -15,7 +17,6 @@
     }
 
 </div>
-
 
 <div class="paginacion">
 
@@ -25,8 +26,8 @@
         </button>
     }
 
-    <span>
-        Página {{paginaActual}}
+    <span class="pagina-actual">
+        Página {{ paginaActual }}
     </span>
 
     @if(hayPaginaSiguiente()){

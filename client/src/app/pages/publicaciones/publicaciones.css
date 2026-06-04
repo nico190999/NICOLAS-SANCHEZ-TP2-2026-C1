@@ -1,0 +1,33 @@
+.contenedor-publicaciones {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.sin-publicaciones {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.paginacion button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.paginacion button:hover {
+    opacity: 0.9;
+}
+
+.pagina-actual {
+    font-weight: bold;
+}

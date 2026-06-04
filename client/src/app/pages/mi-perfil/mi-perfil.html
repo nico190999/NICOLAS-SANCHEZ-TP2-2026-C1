@@ -1,13 +1,10 @@
 <div class="personal-info">
 
-    <p>{{usuario.nombreDeUsuario}}</p>
-
-    <p>{{ usuario.nombre }}</p>
-    <p>{{usuario.apellido}}</p>
-
-    <p>{{usuario.fechaNacimiento}}</p>
-
-    <p>{{usuario.descripcionBreve}}</p>
+    <p><strong>Usuario:</strong> {{usuario.nombreDeUsuario}}</p>
+    <p><strong>Nombre:</strong> {{usuario.nombre}}</p>
+    <p><strong>Apellido:</strong> {{usuario.apellido}}</p>
+    <p><strong>Fecha de nacimiento:</strong> {{usuario.fechaNacimiento}}</p>
+    <p><strong>Descripción:</strong> {{usuario.descripcionBreve}}</p>
 
 </div>
 
@@ -17,8 +14,44 @@
     <button (click)="habilitarFormularioDePublicacion()">Crear Publicación</button>
 </div>
 
-<div>
-    <p>Aquí iran mis Publicaciones</p>
+<div class="contenedor-publicaciones">
+
+    @for(publicacion of publicaciones; track $index){
+
+        <app-publicacion
+            [idPublicacion]="publicacion._id"
+            [idUsuario]="publicacion.idUsuario"
+            [nombreDeUsuario]="publicacion.nombreDeUsuario"
+            [contenido]="publicacion.contenido"
+            [fecha]="publicacion.fecha"
+            [likes]="publicacion.likes.length"
+            [usuariosLikes]="publicacion.likes"
+            [descripcion]="publicacion.descripcion"
+            [comentarios]="publicacion.comentarios.length">
+        </app-publicacion>
+
+    }
+
+</div>
+
+<div class="paginacion">
+
+    @if(paginaActual > 1){
+        <button (click)="paginaAnterior()">
+            ← Página anterior
+        </button>
+    }
+
+    <span class="pagina-actual">
+        Página {{ paginaActual }}
+    </span>
+
+    @if(hayPaginaSiguiente()){
+        <button (click)="siguientePagina()">
+            Página siguiente →
+        </button>
+    }
+
 </div>
 }@else {
     <form [formGroup]="formulario" (ngSubmit)="crearNuevaPublicacion()">

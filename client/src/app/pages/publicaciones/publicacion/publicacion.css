@@ -1,54 +1,40 @@
 .publicacion {
-    width: 500px;
+    max-width: 600px;
     margin: 20px auto;
-    border: 1px solid #dbdbdb;
+    padding: 15px;
+    border: 1px solid #ddd;
     border-radius: 10px;
     background-color: white;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
 }
 
-.usuario {
-    padding: 15px;
-    border-bottom: 1px solid #efefef;
+.cabecera {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
 }
 
-.usuario h3 {
+.cabecera h3 {
     margin: 0;
-    font-size: 16px;
 }
 
-.contenido img {
-    width: 100%;
-    display: block;
+.contenido {
+    margin: 15px 0;
 }
 
-.info {
-    padding: 15px;
-}
-
-.likes {
-    font-weight: bold;
+.detalles {
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 14px;
     margin-bottom: 10px;
 }
 
 .descripcion {
-    margin-bottom: 10px;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
 }
 
-.fecha {
-    color: gray;
-    font-size: 12px;
-    margin-bottom: 15px;
-}
-
-.comentarios h4 {
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.comentarios p {
-    margin: 5px 0;
-    border-bottom: 1px solid #f1f1f1;
-    padding-bottom: 5px;
+.comentarios {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
 }

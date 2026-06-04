@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { inject, ChangeDetectorRef } from '@angular/core';
+import { inject } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-registro',
@@ -57,8 +58,7 @@ export default class Registro {
     }
 
     //Realiza petición de tipo POST, y se le envian los valores del formulario (this.formulario.value)
-    this.http.post(
-      'http://localhost:3000/auth/registro', /* La URL debe coincidir con la del controlador (autenticacion.controller.ts en @Controller("La ruta")). 
+    this.http.post(`${environment.apiUrl}/auth/registro`, /* La URL debe coincidir con la del controlador (autenticacion.controller.ts en @Controller("La ruta")). 
     Para vercel usar https://nicolas-sanchez-tp-2-2026-c1-server.vercel.app/auth/registro.
     Para servidor local usar http://localhost:3000/registro (SE TIENE QUE INICIALIZAR NEST EN EL SERVIDOR MEDIANTE "nest start")
     */
@@ -78,7 +78,6 @@ export default class Registro {
         },
 
         error: (error) => {
-
           console.log(error);
         }
       });

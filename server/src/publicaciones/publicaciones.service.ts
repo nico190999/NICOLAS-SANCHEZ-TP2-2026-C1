@@ -8,17 +8,20 @@ import { Model } from 'mongoose';
 export class PublicacionesService {
 
   constructor(
-    @InjectModel(Publicacion.name) private PublicacionModel: Model<Publicacion>
+    @InjectModel(Publicacion.name) private PublicacionModel: Model<Publicacion> //Conecta PublicacionModel con la coleccion de mongo "publicacions"
   ) { }
 
 
-  async publicar(createPublicacionDto: CreatePublicacionDto) {
+  async publicar(createPublicacionDto: CreatePublicacionDto){
 
     const publicacionCreada = await this.PublicacionModel.create(createPublicacionDto);
 
     return publicacionCreada;
 
   }
+
+
+
 
 
   async listar(
@@ -28,26 +31,24 @@ export class PublicacionesService {
     usuarioId?: string
   ) {
 
-    const filtro: any = {
-      activo: true
-    };
+    const filtro: any = { activo: true };
 
     if (usuarioId) {
-      filtro.usuarioId = usuarioId;
+      filtro.idUsuario = usuarioId;
     }
 
     const sort: Record<string, 1 | -1> =
       orden === 'likes'
         ? { cantidadLikes: -1 }
-        : { fechaCreacion: -1 };
+        : { fecha: -1 };
 
     const publicaciones = await this.PublicacionModel
-      .find()
-      .sort({ fecha: -1 })
+      .find(filtro)
+      .sort(sort)
       .skip(offset)
       .limit(limit);
 
-    const total = await this.PublicacionModel.countDocuments();
+    const total = await this.PublicacionModel.countDocuments(filtro);
 
     return {
       total,
@@ -55,4 +56,59 @@ export class PublicacionesService {
     };
   }
 
+
+
+  async eliminar(id: string) {
+    return await this.PublicacionModel.findByIdAndUpdate(
+      id, { activo: false }, { returnDocument: 'after' } //Busca a la publicación que coincida el idPublicación, le modifica el campo "activo", pasandolo a false, y returnDocument: 'after' devuelve el nuevo elemento actualizado
+    );
+  }
+
+  async darLike( idPublicacion: string, usuarioId: string) {
+
+    const publicacion = await this.PublicacionModel.findById(idPublicacion); //Busca la publicación
+
+    if (!publicacion) { //En caso que no encuentre la publicación, indica esto mismo y se termina la ejecución 
+      throw new Error(
+        'Publicación no encontrada'
+      );
+    }
+
+    if (publicacion.likes.includes(usuarioId)) {
+      return publicacion; //Chequea si el Id del usuario ya se encuentra en likes, en caso que si, no se hace nada. 
+    }
+
+    publicacion.likes.push(usuarioId); //Sin embargo, si no tiene el like del usuairo se le agrega con push al atributo "likes"
+
+    publicacion.cantidadLikes = publicacion.likes.length; //Actualiza cantidad de likes
+
+    await publicacion.save(); //Se guarda en MongoDb
+
+    return publicacion; // Devuelve la publicación
+
+  }
+
+
+  async quitarLike(idPublicacion: string,usuarioId: string) {
+
+    const publicacion = await this.PublicacionModel.findById(idPublicacion);
+
+    if (!publicacion) {
+      throw new Error(
+        'Publicación no encontrada'
+      );
+    }
+
+    publicacion.likes =
+      publicacion.likes.filter(
+        id => id !== usuarioId
+      ); //Recorre el array y da uno nuevo quitando el id del usuario que ya le dio me gusta
+
+    publicacion.cantidadLikes = publicacion.likes.length;
+
+    await publicacion.save();
+
+    return publicacion;
+
+  }
 }

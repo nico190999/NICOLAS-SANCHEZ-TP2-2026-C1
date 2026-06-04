@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -32,37 +33,24 @@ export default class Login {
   login() {
 
     if (this.formulario.invalid) {
-
       this.formulario.markAllAsTouched();
       return;
     }
 
-    this.http.post(
-      'http://localhost:3000/auth/login',
-      this.formulario.value
-    )
-      .subscribe({
-
+    this.http.post(`${environment.apiUrl}/auth/login`,this.formulario.value)
+    .subscribe({
         next: (respuesta) => {
-
-          console.log('Login exitoso. Datos del usuario a continuación');
-          console.log(respuesta);
+          console.log('Login exitoso. Id del usuario a continuación');
           this.authService.logueoExitoso = true;
           this.authService.usuarioLogueado = respuesta;
-
           this.router.navigate(['/publicaciones']);
-
-          console.log(this.authService.usuarioLogueado._id)
-
-
+          console.log(this.authService.usuarioLogueado.usuario._id)
         },
 
         error: (error) => {
-
           console.log('Error de login');
           console.log(error);
         }
-
       });
       
 

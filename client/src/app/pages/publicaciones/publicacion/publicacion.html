@@ -1,32 +1,44 @@
-<div>
+<div class="publicacion">
 
-    <div class="infoUsuario">
-        <strong>{{nombreDeUsuario}}</strong>
+    <div class="cabecera">
+        <h3>{{ nombreDeUsuario }}</h3>
     </div>
 
     <div class="contenido">
         <p>{{ contenido }}</p>
     </div>
 
-    <div class="info">
+    <div class="detalles">
 
-        <div class="fecha">
+        <span class="fecha">
             {{ fecha }}
-        </div>
+        </span>
 
-        <div class="likes">
+        <span class="likes">
             {{ likes }} Me gusta
-        </div>
-
-        <div class="descripcion">
-            {{ descripcion }}
-        </div>
-
-        <div class="comentarios">
-            <h4>Comentarios: {{comentarios}}</h4>
-
-        </div>
+        </span>
 
     </div>
+
+    @if(!usuarioYaDioLike()){
+    <button (click)="darLike()">Me gusta</button>
+    }
+
+    @if(usuarioYaDioLike()){
+    <button (click)="quitarLike()">Quitar Me gusta</button>
+    }
+
+    <div class="descripcion">
+        <p>{{ descripcion }}</p>
+    </div>
+
+    <div class="comentarios">
+        <h4>Comentarios ({{ comentarios }})</h4>
+    </div>
+
+    @if(esMia()){
+    <button (click)="eliminarPublicacion()">Eliminar Publicación
+    </button>
+    }
 
 </div>

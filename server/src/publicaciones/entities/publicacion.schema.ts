@@ -36,6 +36,12 @@ export class Publicacion {
     @Prop({ type: [String], default: [] })
     comentarios: string[];
 
+    @Prop({ default: 0 })
+    cantidadLikes: number;
+
+    @Prop({ default: true })
+    activo: boolean; /* Se usa para la baja logica, es deci desactivarla */
+
 }
 
 export const PublicacionSchema = SchemaFactory.createForClass(Publicacion);
