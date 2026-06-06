@@ -37,8 +37,8 @@ export default class Login {
       return;
     }
 
-    this.http.post(`${environment.apiUrl}/auth/login`,this.formulario.value)
-    .subscribe({
+    this.http.post(`${environment.apiUrl}/auth/login`, this.formulario.value)
+      .subscribe({
         next: (respuesta) => {
           console.log('Login exitoso. Id del usuario a continuación');
           this.authService.logueoExitoso = true;
@@ -52,13 +52,51 @@ export default class Login {
           console.log(error);
         }
       });
-      
+
 
   }
 
-  loginRapido(){
-    this.formulario.patchValue({correo: "nico123@gmail.com", contrasenia: "nico123"})
+  loginRapido() {
+    this.formulario.patchValue({ correo: "nico123@gmail.com", contrasenia: "nico123" })
   }
+
+  loginRapido2() {
+    this.formulario.patchValue({ correo: "nico1@gmail.com", contrasenia: "nico1" })
+  }
+
+
+
+  //---------------------------SUBIR IMAGEN ------------
+  archivoSeleccionado!: File;
+
+  seleccionarArchivo(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files?.length) {
+      this.archivoSeleccionado = input.files[0];
+    }
+  }
+
+  subir() {
+    const formData = new FormData();
+
+    formData.append('archivo', this.archivoSeleccionado);
+
+    this.http.post<{ url: string }>(
+      'http://localhost:3000/publicaciones/subirImagen',
+      formData
+    )
+      .subscribe({
+        next: (resp) => {
+          console.log(resp.url);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
+
+  //---------------------------SUBIR IMAGEN ------------
 
 }
 

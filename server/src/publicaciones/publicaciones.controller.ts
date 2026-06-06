@@ -1,13 +1,52 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { PublicacionesService } from './publicaciones.service';
 import { CreatePublicacionDto } from './dto/create-publicacion.dto';
 import { Query } from '@nestjs/common';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
 
+import { FileInterceptor } from '@nestjs/platform-express';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import multer from 'multer';
+
+cloudinary.config({
+  cloud_name: 'dbll45f5w',
+  api_key: '167339771336668',
+  api_secret: 'Euba_SQ64MkMasWYo6e9DeoZJdw',
+});
+
+
+
 //El controlador unicamente lo que hace es recibir las peticiones de angular (meidante las rutas /publicaciones/etc), obtiene los parametros y llama a los servicios que se encargan de realizar la función 
 @Controller('publicaciones')
 export class PublicacionesController {
   constructor(private readonly publicacionesService: PublicacionesService) { }
+
+  //----------------------------------- SUBIDA DE IMAGENES -------------------------------------
+
+  logger = new Logger('PETICIONES', { timestamp: true });
+
+  @Post('subirImagen')
+  @UseInterceptors(
+    FileInterceptor('archivo', {
+      storage: new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+          public_id: (req, file) => `IMG_${Date.now()}_archivos`,
+        },
+      }),
+    }),
+  )
+  async subidaDeArchivos(@UploadedFile() file: Express.Multer.File) {
+    return {
+      url: file.path
+    };
+  }
+
+  //----------------------------------- SUBIDA DE IMAGENES -------------------------------------
+
+
+
 
   @Post('publicar')
   create(@Body() createPublicacionDto: CreatePublicacionDto) {
@@ -35,7 +74,7 @@ export class PublicacionesController {
 
   @Post(':id/like')
   darLike(
-    @Param('id') idPublicacion: string, 
+    @Param('id') idPublicacion: string,
     @Body('usuarioId') usuarioId: string //Body toma lo que se pasa luego de la ruta en la petición 
   ) {
     return this.publicacionesService.darLike(idPublicacion, usuarioId);

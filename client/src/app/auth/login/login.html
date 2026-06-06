@@ -22,5 +22,14 @@
         <span>Contraseña</span>
     </label>
     <button (click)="loginRapido()">Login Rapido</button>
+    <button (click)="loginRapido2()">Login Rapido 2</button>
     <button type="submit" class="submit">Iniciar Sesión</button>
 </form>
+
+
+<input
+    type="file"
+    (change)="seleccionarArchivo($event)"
+/>
+
+<button (click)="subir()">Subir</button>
