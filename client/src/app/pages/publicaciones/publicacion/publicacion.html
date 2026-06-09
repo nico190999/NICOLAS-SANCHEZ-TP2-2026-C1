@@ -4,40 +4,148 @@
         <h3>{{ nombreDeUsuario }}</h3>
     </div>
 
-    <div class="contenido">
-        <p>{{ contenido }}</p>
-    </div>
-
     <div class="detalles">
-
         <span class="fecha">
             {{ fecha }}
         </span>
+    </div>
 
-        <span class="likes">
-            {{ likes }} Me gusta
-        </span>
+    <div class="contenido">
+
+        @if (contenido) {
+        <img [src]="contenido" alt="Imagen de la publicación">
+        }
 
     </div>
 
-    @if(!usuarioYaDioLike()){
-    <button (click)="darLike()">Me gusta</button>
-    }
+    <div class="interaccion-publicacion">
 
-    @if(usuarioYaDioLike()){
-    <button (click)="quitarLike()">Quitar Me gusta</button>
-    }
 
-    <div class="descripcion">
-        <p>{{ descripcion }}</p>
+        <div class="contador-likes">
+            <span>
+                {{ likes }} Me gusta
+            </span>
+        </div>
+
+
+
+        <div>
+            @if(!usuarioYaDioLike()){
+            <button class="btn-like" (click)="darLike()">
+                Me gusta
+            </button>
+            }
+
+
+            @if(usuarioYaDioLike()){
+            <button class="btn-quitar-like" (click)="quitarLike()">
+                Quitar me gusta
+            </button>
+            }
+        </div>
+
+
     </div>
 
-    <div class="comentarios">
-        <h4>Comentarios ({{ comentarios }})</h4>
+
+
+    <div class="descripcion-publicacion">
+
+        <p>
+            {{ descripcion }}
+        </p>
+
+    </div>
+
+    <div class="contenedor-comentarios">
+
+        <h4 class="titulo-comentarios">
+            Comentarios
+        </h4>
+
+        @if(!aniadirComentarioFlag){
+        <button class="btn-anadir-comentario" (click)="habilitarFormularioComentario()">
+            Añadir comentario
+        </button>
+        <br>
+        }@else {
+        <form class="form-comentario" [formGroup]="formularioComentario" (ngSubmit)="agregarComentario()">
+            <input class="input-comentario" type="text" formControlName="comentario"
+                placeholder="Escribe un comentario...">
+
+            <div class="acciones-comentario">
+                <button class="btn-publicar" type="submit">
+                    Publicar
+                </button>
+
+                <button class="btn-cancelar" type="button" (click)="inhabilitarFormularioComentario()">
+                    Cancelar
+                </button>
+            </div>
+
+        </form>
+        }
+
+        <br>
+
+
+        <div class="lista-comentarios">
+
+            @for(
+            comentario of listaComentarios;
+            track comentario._id
+            ){
+
+            <div class="comentario">
+
+
+                <div class="cabecera-comentario">
+
+                    <strong class="usuario-comentario">
+                        {{ comentario.nombreDeUsuario }}
+                    </strong>
+
+
+                    @if (comentario.idUsuario == authService.usuarioLogueado.usuario._id) {
+                    <button class="btn-modificar" (click)="editarComentario(comentario)">
+                        Modificar
+                    </button>
+                    }
+
+                </div>
+
+
+                <p class="mensaje-comentario">
+                    {{ comentario.mensaje }}
+
+                    @if(comentario.modificado){
+                    <small class="editado">
+                        editado
+                    </small>
+                    }
+                </p>
+
+
+            </div>
+
+
+            }
+
+
+        </div>
+
+
+        <button class="btn-cargar" (click)="cargarMasComentarios()">
+
+            Cargar más comentarios
+
+        </button>
+
+
     </div>
 
     @if(esMia()){
-    <button (click)="eliminarPublicacion()">Eliminar Publicación
+    <button class="btn-eliminarPublicacion" (click)="eliminarPublicacion()">Eliminar Publicación
     </button>
     }
 

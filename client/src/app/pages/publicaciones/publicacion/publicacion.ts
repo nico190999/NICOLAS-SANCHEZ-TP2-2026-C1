@@ -1,22 +1,23 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth-service';
 import { ChangeDetectorRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { ɵInternalFormsSharedModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from "@angular/forms";
+import { OnInit } from '@angular/core';
+import { PeticionesPublicacionservice } from './peticiones.publicacion.service';
 
 @Component({
   selector: 'app-publicacion',
   standalone: true,
-  imports: [],
+  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule],
   templateUrl: './publicacion.html',
   styleUrl: './publicacion.css',
 })
-export class Publicacion {
+export class Publicacion implements OnInit {
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private http: HttpClient
+    private peticiones: PeticionesPublicacionservice
   ) { };
 
   @Input()
@@ -46,30 +47,108 @@ export class Publicacion {
   @Input()
   comentarios: any;
 
-  //----------------- FUNCIONES CON ENVIO DE PETICIONES AL CONTROLADOR-----------------
+  listaComentarios: any[] = [];
 
+  cantidadComentarios = 3;
 
-  eliminarPublicacion() {
-    this.http.delete(`${environment.apiUrl}/publicaciones/${this.idPublicacion}`)
+  offsetComentarios = 0;
+
+  //------------------------------------
+
+  aniadirComentarioFlag = false;
+
+  ngOnInit() {
+
+    this.cargarComentariosIniciales();
+
+  }
+
+  formularioComentario = new FormGroup({
+    comentario: new FormControl("", Validators.required)
+  })
+
+  agregarComentario() {
+    if (this.formularioComentario.invalid) {
+      return;
+    }
+
+    const nuevoComentario = {
+      idPublicacion: this.idPublicacion,
+      idUsuario: this.authService.usuarioLogueado.usuario._id,
+      nombreDeUsuario: this.authService.usuarioLogueado.usuario.nombreDeUsuario,
+      mensaje: this.formularioComentario.value.comentario,
+      fecha: new Date().toISOString()
+    };
+
+    this.peticiones.peticionAgregarComentario(nuevoComentario)
       .subscribe({
         next: () => {
-          console.log("Se elimino la publicación")
-          this.cdr.detectChanges()
+          console.log("Comentario agregado");
+          this.formularioComentario.reset();
+          this.aniadirComentarioFlag = false;
+          this.cargarComentariosIniciales();
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.log(err);
         }
       });
+
+  }
+
+  cargarComentariosIniciales() {
+
+    this.listaComentarios = [];
+    this.offsetComentarios = 0;
+
+    this.cargarComentarios();
+
+  }
+
+  cargarComentarios() {
+    this.peticiones.peticionCargarcomentarios(this.idPublicacion, this.offsetComentarios, this.cantidadComentarios)
+      .subscribe({
+        next: (resp) => {
+          this.listaComentarios = [
+            ...this.listaComentarios,
+            ...resp
+          ].filter(
+            (comentario, index, self) =>
+              index === self.findIndex(c => c._id === comentario._id)
+          );;
+          this.offsetComentarios += resp.length;
+          this.cdr.detectChanges();
+        },
+
+        error: (err) => {
+          console.log(err)
+        }
+
+      });
+
+  }
+
+
+  eliminarPublicacion() {
+    this.peticiones.peticionEliminarPublicacion(this.idPublicacion).subscribe({
+      next: () => {
+        console.log("Se elimino la publicación")
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   darLike() {
     const usuarioId =
       this.authService.usuarioLogueado.usuario._id;
 
-    this.http.post(`${environment.apiUrl}/publicaciones/${this.idPublicacion}/like`, { usuarioId })
+    this.peticiones.peticionDarLike(this.idPublicacion, usuarioId)
       .subscribe({
         next: () => {
           console.log("Likeaste la publicación")
+          this.cdr.detectChanges()
         },
         error: (err) => {
           console.log(err);
@@ -81,10 +160,11 @@ export class Publicacion {
     const usuarioId =
       this.authService.usuarioLogueado.usuario._id;
 
-    this.http.delete(`${environment.apiUrl}/publicaciones/${this.idPublicacion}/like/${usuarioId}`)
+    this.peticiones.peticionQuitarLike(this.idPublicacion, usuarioId)
       .subscribe({
         next: () => {
           console.log("Quitaste el like a la publicación")
+          this.cdr.detectChanges()
         },
         error: (err) => {
           console.log(err);
@@ -92,21 +172,48 @@ export class Publicacion {
       });
   }
 
+  editarComentario(comentario: any) {
+    const nuevoMensaje = prompt(
+      "Modificar comentario",
+      comentario.mensaje
+    );
 
-  //----------------- FUNCIONES CON ENVIO DE PETICIONES AL CONTROLADOR-----------------
+    if (nuevoMensaje) {
+      this.peticiones.peticionModificarComentario(comentario._id, nuevoMensaje)
+        .subscribe({
+          next: () => {
+            console.log("Comentario modificado");
+            this.cargarComentarios();
+            this.cdr.detectChanges();
+          }, error: (err) => {
+            console.log(err);
+          }
+        });
+    }
+  }
 
+
+  //---------------------------------
+
+  habilitarFormularioComentario() {
+    this.aniadirComentarioFlag = true;
+  }
+
+  inhabilitarFormularioComentario() {
+    this.aniadirComentarioFlag = false;
+  }
 
   esMia(): boolean {
     return this.authService.usuarioLogueado.usuario._id === this.idUsuario;
   }
 
   usuarioYaDioLike(): boolean {
-
-    const usuarioId =
-      this.authService.usuarioLogueado.usuario._id;
-
+    const usuarioId = this.authService.usuarioLogueado.usuario._id;
     return this.usuariosLikes.includes(usuarioId);
+  }
 
+  cargarMasComentarios() {
+    this.cargarComentarios();
   }
 
 

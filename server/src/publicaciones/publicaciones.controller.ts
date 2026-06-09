@@ -49,8 +49,29 @@ export class PublicacionesController {
 
 
   @Post('publicar')
-  create(@Body() createPublicacionDto: CreatePublicacionDto) {
-    return this.publicacionesService.publicar(createPublicacionDto);
+  @UseInterceptors(
+    FileInterceptor('archivo', {
+      storage: new CloudinaryStorage({
+        cloudinary,
+        params: {
+          public_id: (req, file) =>
+            `IMG_${Date.now()}_archivos`,
+        },
+      }),
+    }),
+  )
+  create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createPublicacionDto: CreatePublicacionDto,
+  ) {
+
+    if (file) {
+      createPublicacionDto.contenido = file.path;
+    }
+
+    return this.publicacionesService.publicar(
+      createPublicacionDto,
+    );
   }
 
   @Get()
@@ -89,7 +110,6 @@ export class PublicacionesController {
     return this.publicacionesService.quitarLike(idPublicacion, usuarioId);
   }
 }
-
 
 /* 
 

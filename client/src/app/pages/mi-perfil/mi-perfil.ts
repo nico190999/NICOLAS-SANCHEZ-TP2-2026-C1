@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../auth/services/auth-service';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { ChangeDetectorRef } from '@angular/core';
 import { Publicacion } from '../publicaciones/publicacion/publicacion';
+import { PeticionesPublicacionesservice } from '../publicaciones/peticiones.publicaciones.service';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -15,21 +13,20 @@ import { Publicacion } from '../publicaciones/publicacion/publicacion';
 })
 export default class MiPerfil {
 
-  http = inject(HttpClient);
+  constructor(
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private peticiones: PeticionesPublicacionesservice
+  ) { }
 
   paginaActual = 1;
   limit = 3;
   orden = 'fecha';
-
   publicaciones: any[] = [];
   total = 0;
-
   usuario: any;
-
-  constructor(
-    private authService: AuthService,
-    private cdr: ChangeDetectorRef
-  ) { }
+  archivoSeleccionado!: File;
+  crearPublicacionFlag: boolean = false;
 
   ngOnInit() {
     this.usuario = this.authService.usuarioLogueado.usuario;
@@ -38,11 +35,10 @@ export default class MiPerfil {
 
   cargarPublicaciones() {
     const offset = (this.paginaActual - 1) * this.limit;
-    
-    this.http.get(`${environment.apiUrl}/publicaciones?offset=${offset}&limit=${this.limit}&orden=${this.orden}&usuarioId=${this.usuario._id}`)
+
+    this.peticiones.peticionCargarPublicaciones(offset, this.limit, this.orden, this.usuario._id)
       .subscribe({
         next: (resp: any) => {
-
           console.log("RESPUESTA", resp);
 
           this.publicaciones = resp.publicaciones;
@@ -55,36 +51,37 @@ export default class MiPerfil {
       });
   }
 
+
+  formulario = new FormGroup({
+    descripcion: new FormControl("", Validators.required)
+  })
+
   crearNuevaPublicacion() {
     if (this.formulario.invalid) {
       this.formulario.markAllAsTouched();
       return;
     }
 
-    const nuevaPublicacion = {
-      idUsuario: this.usuario._id,
-      nombreDeUsuario: this.usuario.nombreDeUsuario,
-      contenido: this.formulario.value.contenido,
-      descripcion: this.formulario.value.descripcion,
-      fecha: new Date().toISOString()
-    };
+    const formData = new FormData();
 
-    this.http.post(`${environment.apiUrl}/publicaciones/publicar`, nuevaPublicacion).subscribe({
-      next: (respuesta) => {
-        console.log("Se creó una nueva publicación")
-        console.log(respuesta)
-        this.crearPublicacionFlag = false;
-        this.cdr.detectChanges()
-      },
-      error: (err) => {
+    formData.append('idUsuario', this.usuario._id);
+    formData.append('nombreDeUsuario', this.usuario.nombreDeUsuario);
+    formData.append('descripcion', this.formulario.value.descripcion ?? '');
+    formData.append('fecha', new Date().toISOString());
 
-        console.log(err.error);
+    if (this.archivoSeleccionado) {
+      formData.append('archivo', this.archivoSeleccionado);
+    }
 
-        console.log(err.error.message);
-
-      }
-    })
-
+    this.peticiones.peticionPublicar(formData)
+      .subscribe({
+        next: (resp) => {
+          console.log(resp);
+        },
+        error: (err) => {
+          console.log(err.error);
+        }
+      });
   }
 
   hayPaginaSiguiente(): boolean {
@@ -92,32 +89,16 @@ export default class MiPerfil {
   }
 
   siguientePagina() {
-
     this.paginaActual++;
-
     this.cargarPublicaciones();
   }
 
   paginaAnterior() {
-
     if (this.paginaActual > 1) {
-
       this.paginaActual--;
-
       this.cargarPublicaciones();
-
     }
   }
-
-  crearPublicacionFlag: boolean = false;
-
-  formulario = new FormGroup({
-
-    contenido: new FormControl("", Validators.required),
-
-    descripcion: new FormControl("", Validators.required)
-
-  })
 
   habilitarFormularioDePublicacion() {
     this.crearPublicacionFlag = true;
@@ -125,6 +106,13 @@ export default class MiPerfil {
 
   deshabilitarFormularioDePublicacion() {
     this.crearPublicacionFlag = false;
+  }
+
+  seleccionarArchivo(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.archivoSeleccionado = input.files[0];
+    }
   }
 
 

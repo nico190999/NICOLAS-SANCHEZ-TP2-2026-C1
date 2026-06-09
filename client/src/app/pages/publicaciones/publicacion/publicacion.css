@@ -1,40 +1,301 @@
 .publicacion {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: white;
+    width: 100%;
+    max-width: 450px;
+    margin: 15px auto;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.contenido {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+}
+
+.contenido img {
+    max-width: 100%;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+    display: block;
 }
 
 .cabecera {
-    border-bottom: 1px solid #eee;
-    margin-bottom: 10px;
+    padding: 10px 15px;
 }
 
 .cabecera h3 {
     margin: 0;
+    font-size: 0.95rem;
 }
 
-.contenido {
-    margin: 15px 0;
-}
 
-.detalles {
-    display: flex;
-    justify-content: space-between;
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.descripcion {
-    padding: 10px 0;
-    border-top: 1px solid #eee;
-}
-
-.comentarios {
+.interaccion-publicacion {
     margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+}
+
+
+
+.contador-likes {
+
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+
+}
+
+
+
+
+.btn-like {
+    padding: 8px 18px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.btn-quitar-like {
+    padding: 8px 18px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+
+.btn-quitar-like:hover {
+    background-color: #eaf2ff;
+}
+
+.descripcion-publicacion {
+    margin-top: 15px;
+    padding: 12px 15px;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+}
+
+.descripcion-publicacion p {
+    margin: 0;
+    color: #444;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+
+
+.contenedor-comentarios {
+    padding: 5px;
+}
+
+
+.titulo-comentarios {
+
+    font-size: 18px;
+    margin-bottom: 15px;
+
+}
+
+
+
+.lista-comentarios {
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+}
+
+
+
+.comentario {
+    background-color: #f5f5f5;
+    padding: 12px 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+
+
+.cabecera-comentario {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+
+}
+
+
+
+.usuario-comentario {
+
+    font-size: 14px;
+
+    color: #333;
+
+}
+
+
+
+.mensaje-comentario {
+
+    margin: 0;
+
+    font-size: 15px;
+
+    color: #555;
+
+    line-height: 1.4;
+
+}
+
+
+
+.editado {
+    font-size: 12px;
+    color: #888;
+    margin-left: 6px;
+    font-style: italic;
+    display: flex;
+    right: 0px;
+}
+
+
+
+.btn-modificar {
+
+    border: none;
+
+    background-color: transparent;
+
+    color: #1877f2;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+}
+
+
+
+.btn-cargar {
+
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #eb0f0f;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    font-size: 14px;
+
+}
+
+.btn-eliminarPublicacion {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #5c1f03;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.btn-anadir-comentario {
+
+    padding: 10px 18px;
+
+    border: none;
+
+    background-color: #f22618;
+
+    color: rgb(255, 255, 255);
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+}
+
+.form-comentario {
+
+    margin-top: 15px;
+
+    background-color: #f5f5f5;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+}
+
+
+
+.input-comentario {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    outline: none;
+
+    font-size: 14px;
+
+}
+
+.acciones-comentario {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+
+
+.btn-publicar {
+    padding: 8px 16px;
+    border: none;
+    background-color: #f21818;
+    color: white;
+    cursor: pointer;
+}
+
+
+
+
+.btn-cancelar {
+
+    padding: 8px 16px;
+
+    border: 1px solid #030000;
+
+    background-color: rgb(248, 248, 248);
+
+    cursor: pointer;
+
+}
+
+
+
+.btn-cancelar:hover {
+
+    background-color: #e9e9e9;
+
 }

@@ -57,13 +57,9 @@
     <form 
     [formGroup]="formulario" (ngSubmit)="crearNuevaPublicacion()">
 
-        <label>
-            <input 
-            type="text"
-            formControlName="contenido"
-            >
-            <span>Contenido</span>
-        </label>
+    <input
+    type="file"
+    (change)="seleccionarArchivo($event)">
 
         <label>
             <input 

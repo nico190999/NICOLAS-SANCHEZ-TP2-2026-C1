@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Publicacion } from './publicacion/publicacion';
 import { ChangeDetectorRef } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { PeticionesPublicacionesservice } from './peticiones.publicaciones.service';
 
 @Component({
   selector: 'app-publicaciones',
@@ -23,7 +22,7 @@ export default class PublicacionesComponent {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private http: HttpClient
+    private peticiones: PeticionesPublicacionesservice
   ) { }
 
   ngOnInit() {
@@ -34,7 +33,7 @@ export default class PublicacionesComponent {
 
     const offset = (this.paginaActual - 1) * this.limit;
 
-    this.http.get(`${environment.apiUrl}/publicaciones?offset=${offset}&limit=${this.limit}&orden=${this.orden}`)
+    this.peticiones.peticionCargarPublicaciones(offset, this.limit, this.orden)
       .subscribe({
         next: (resp: any) => {
 
