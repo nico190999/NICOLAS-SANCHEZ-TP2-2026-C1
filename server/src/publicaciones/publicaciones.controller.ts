@@ -3,11 +3,12 @@ import { PublicacionesService } from './publicaciones.service';
 import { CreatePublicacionDto } from './dto/create-publicacion.dto';
 import { Query } from '@nestjs/common';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
-
 import { FileInterceptor } from '@nestjs/platform-express';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import multer from 'multer';
+import { UseGuards } from '@nestjs/common';
+import { Req } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/autenticacion/jwt.guard';
 
 cloudinary.config({
   cloud_name: 'dbll45f5w',
@@ -93,12 +94,17 @@ export class PublicacionesController {
 
 
 
+  @UseGuards(JwtAuthGuard)
   @Post(':id/like')
-  darLike(
-    @Param('id') idPublicacion: string,
-    @Body('usuarioId') usuarioId: string //Body toma lo que se pasa luego de la ruta en la petición 
-  ) {
-    return this.publicacionesService.darLike(idPublicacion, usuarioId);
+  darLike(@Param('id') idPublicacion: string, @Req() req) {
+
+    const usuarioId = req.user._id;
+
+    return this.publicacionesService.darLike(
+      idPublicacion,
+      usuarioId
+    );
+
   }
 
 

@@ -11,9 +11,6 @@ import { AuthService } from '../../auth/services/auth-service';
   templateUrl: './publicaciones.html',
 })
 export default class PublicacionesComponent {
-
-  
-
   paginaActual = 1;
   limit = 3;
   orden = 'fecha';
@@ -28,26 +25,30 @@ export default class PublicacionesComponent {
   ) { }
 
   ngOnInit() {
-    console.log("Componente de publicaciones cargado")
-    console.log(this.authService.usuarioLogueado)
+    this.cargarPublicaciones();
+  }
+
+  ordenarPorFecha(){
+    console.log("Entro a la función de ordenar por fecha")
+    this.orden = 'fecha'
+    this.cargarPublicaciones();
+  }
+
+  ordenarPorLikes(){
+    console.log("Entro a la función de ordenar por likes")
+    this.orden = 'likes'
     this.cargarPublicaciones();
   }
 
   cargarPublicaciones() {
-
     const offset = (this.paginaActual - 1) * this.limit;
 
     this.peticiones.peticionCargarPublicaciones(offset, this.limit, this.orden)
       .subscribe({
         next: (resp: any) => {
-
-          console.log("RESPUESTA", resp);
-
           this.publicaciones = resp.publicaciones;
           this.total = resp.total;
-
           this.cdr.detectChanges();
-
         }
       });
   }

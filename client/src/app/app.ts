@@ -3,6 +3,7 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 import { AuthService } from './auth/services/auth-service';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class App {
   router = inject(Router);
 
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -25,9 +27,10 @@ export class App {
         next: (resp: any) => {
           console.log("TOKEN VALIDO");
           console.log(resp);
-          this.authService.usuarioLogueado = resp;
+          this.authService.usuarioLogueado = resp.usuario;
           this.authService.logueoExitoso = true;
           this.authService.cargando = false;
+          this.cdr.detectChanges()
         },
 
         error: (err) => {

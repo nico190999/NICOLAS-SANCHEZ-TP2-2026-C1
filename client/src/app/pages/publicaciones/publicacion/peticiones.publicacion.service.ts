@@ -23,8 +23,11 @@ export class PeticionesPublicacionservice {
         return this.http.delete(`${environment.apiUrl}/publicaciones/${idPublicacion}`)
     }
 
-    peticionDarLike(idPublicacion: string, usuarioId: any) {
-        return this.http.post(`${environment.apiUrl}/publicaciones/${idPublicacion}/like`, { usuarioId })
+    peticionDarLike(idPublicacion: string) {
+        const token = localStorage.getItem("token");
+        return this.http.post(`${environment.apiUrl}/publicaciones/${idPublicacion}/like`,{}, {headers:{
+            Authorization:`Bearer ${token}`
+        }});
     }
 
     peticionQuitarLike(idPublicacion: string, usuarioId: any) {

@@ -29,7 +29,7 @@ export default class MiPerfil {
   crearPublicacionFlag: boolean = false;
 
   ngOnInit() {
-    this.usuario = this.authService.usuarioLogueado?.usuario;
+    this.usuario = this.authService.usuarioLogueado;
     this.cargarPublicaciones();
   }
 

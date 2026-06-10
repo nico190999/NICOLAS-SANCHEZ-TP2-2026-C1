@@ -106,7 +106,7 @@
                     </strong>
 
 
-                    @if (comentario.idUsuario == authService.usuarioLogueado?.usuario?._id) {
+                    @if (comentario.idUsuario == authService.usuarioLogueado?._id) {
                     <button class="btn-modificar" (click)="editarComentario(comentario)">
                         Modificar
                     </button>
@@ -115,15 +115,44 @@
                 </div>
 
 
+                @if(comentarioEditandoId === comentario._id){
+
+                <textarea class="input-editar-comentario" [(ngModel)]="mensajeEditando">
+</textarea>
+
+
+                <button class="btn-publicar" (click)="guardarComentarioEditado(comentario)">
+                    Guardar
+                </button>
+
+
+                <button class="btn-cancelar" (click)="comentarioEditandoId = null">
+                    Cancelar
+                </button>
+
+
+                }
+                @else {
+
+
                 <p class="mensaje-comentario">
+
                     {{ comentario.mensaje }}
 
+
                     @if(comentario.modificado){
+
                     <small class="editado">
                         editado
                     </small>
+
                     }
+
+
                 </p>
+
+
+                }
 
 
             </div>

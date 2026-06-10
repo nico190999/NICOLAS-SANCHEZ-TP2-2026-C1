@@ -52,7 +52,7 @@ export class ComentariosService {
                 modificado: true
             },
             {
-                new: true
+                returnDocument: "after"
             }
         );
 

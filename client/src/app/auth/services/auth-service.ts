@@ -9,7 +9,6 @@ import { throwError } from 'rxjs';
 })
 export class AuthService {
 
-
   usuarioLogueado: any = null;
 
   token: string | null = null;
@@ -23,26 +22,19 @@ export class AuthService {
   ) { }
 
   autorizar() {
-
     const token = localStorage.getItem("token");
-
     console.log("TOKEN ENVIADO:", token);
-
     if (!token) {
-      return throwError(() => ({mensaje: "No existe sesión"}));
+      return throwError(() => ({ mensaje: "No existe sesión" }));
     }
-
-    return this.http.post(`${environment.apiUrl}/auth/autorizar`,{ token });
+    return this.http.post(`${environment.apiUrl}/auth/autorizar`, { token });
   }
-
 
   guardarSesion(respuesta: any) {
     this.token = respuesta.token;
     this.usuarioLogueado = respuesta.usuario;
     this.logueoExitoso = true;
-
     localStorage.setItem("token", respuesta.token);
-
     localStorage.setItem("usuario", JSON.stringify(respuesta.usuario));
   }
 
@@ -67,7 +59,6 @@ export class AuthService {
   }
 
   validarToken() {
-
     return this.http.post(
       `${environment.apiUrl}/auth/autorizar`,
       {

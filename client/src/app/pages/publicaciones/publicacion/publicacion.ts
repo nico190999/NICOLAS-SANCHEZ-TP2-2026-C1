@@ -4,11 +4,12 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ɵInternalFormsSharedModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from "@angular/forms";
 import { OnInit } from '@angular/core';
 import { PeticionesPublicacionservice } from './peticiones.publicacion.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-publicacion',
   standalone: true,
-  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule],
+  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule],
   templateUrl: './publicacion.html',
   styleUrl: './publicacion.css',
 })
@@ -74,8 +75,8 @@ export class Publicacion implements OnInit {
 
     const nuevoComentario = {
       idPublicacion: this.idPublicacion,
-      idUsuario: this.authService.usuarioLogueado?.usuario?._id,
-      nombreDeUsuario: this.authService.usuarioLogueado?.usuario?.nombreDeUsuario,
+      idUsuario: this.authService.usuarioLogueado?._id,
+      nombreDeUsuario: this.authService.usuarioLogueado?.nombreDeUsuario,
       mensaje: this.formularioComentario.value.comentario,
       fecha: new Date().toISOString()
     };
@@ -142,11 +143,9 @@ export class Publicacion implements OnInit {
     });
   }
 
-  darLike() {
+  /* darLike() {
     const usuarioId =
-      this.authService.usuarioLogueado?.usuario?._id;
-
-
+      this.authService.usuarioLogueado?._id;
     if (!usuarioId) {
       return;
     }
@@ -161,10 +160,23 @@ export class Publicacion implements OnInit {
           console.log(err);
         }
       });
+  } */
+
+  darLike() {
+    this.peticiones.peticionDarLike(this.idPublicacion)
+      .subscribe({
+        next: () => {
+          console.log("Likeaste la publicación");
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
   }
 
   quitarLike() {
-    const usuarioId = this.authService.usuarioLogueado?.usuario?._id;
+    const usuarioId = this.authService.usuarioLogueado?._id;
 
     if (!usuarioId) {
       return;
@@ -182,24 +194,33 @@ export class Publicacion implements OnInit {
       });
   }
 
-  editarComentario(comentario: any) {
-    const nuevoMensaje = prompt(
-      "Modificar comentario",
-      comentario.mensaje
-    );
+  comentarioEditandoId: string | null = null;
 
-    if (nuevoMensaje) {
-      this.peticiones.peticionModificarComentario(comentario._id, nuevoMensaje)
-        .subscribe({
-          next: () => {
-            console.log("Comentario modificado");
-            this.cargarComentarios();
-            this.cdr.detectChanges();
-          }, error: (err) => {
-            console.log(err);
-          }
-        });
-    }
+  mensajeEditando: string = "";
+
+  editarComentario(comentario: any) {
+
+    this.comentarioEditandoId = comentario._id;
+
+    this.mensajeEditando = comentario.mensaje;
+
+  }
+
+  guardarComentarioEditado(comentario: any) {
+    this.peticiones.peticionModificarComentario(comentario._id, this.mensajeEditando)
+      .subscribe({
+        next: () => {
+          console.log("Comentario modificado");
+          comentario.mensaje = this.mensajeEditando;
+          comentario.modificado = true;
+          this.comentarioEditandoId = null;
+          this.mensajeEditando = "";
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
   }
 
 
@@ -215,14 +236,14 @@ export class Publicacion implements OnInit {
 
   esMia(): boolean {
 
-    return this.authService.usuarioLogueado?.usuario?._id === this.idUsuario;
+    return this.authService.usuarioLogueado?._id === this.idUsuario;
 
   }
 
   usuarioYaDioLike(): boolean {
 
     const usuarioId =
-      this.authService.usuarioLogueado?.usuario?._id;
+      this.authService.usuarioLogueado?._id;
 
     if (!usuarioId) {
       return false;

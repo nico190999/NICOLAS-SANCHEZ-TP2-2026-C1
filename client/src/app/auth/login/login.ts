@@ -31,7 +31,6 @@ export default class Login {
   })
 
   login() {
-
     if (this.formulario.invalid) {
       this.formulario.markAllAsTouched();
       return;
@@ -40,20 +39,16 @@ export default class Login {
     this.http.post(`${environment.apiUrl}/auth/login`, this.formulario.value)
       .subscribe({
         next: (respuesta) => {
-          console.log('Respuesta login');
-          console.log(respuesta)
+          console.log('Respuesta login', respuesta);
           this.authService.guardarSesion(respuesta);
           this.authService.logueoExitoso = true;
           this.router.navigate(['/publicaciones']);
         },
 
         error: (error) => {
-          console.log('Error de login');
-          console.log(error);
+          console.log('Error de login', error);
         }
       });
-
-
   }
 
   loginRapido() {

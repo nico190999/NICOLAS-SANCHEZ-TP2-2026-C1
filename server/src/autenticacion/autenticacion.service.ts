@@ -14,12 +14,16 @@ export class AutenticacionService {
 
   generarToken(usuario: any) {
 
+    const datos = usuario.toObject();
+
     const payload = {
-      uuid: usuario._id,
-      correo: usuario.correo,
-      nombreUsuario: usuario.nombreDeUsuario,
-      rol: usuario.rol
+      _id: datos._id,
+      correo: datos.correo,
+      nombreDeUsuario: datos.nombreDeUsuario,
+      perfil: datos.perfil
     };
+
+    console.log("JWT PAYLOAD:", payload);
 
     return this.jwtService.sign(payload);
   }

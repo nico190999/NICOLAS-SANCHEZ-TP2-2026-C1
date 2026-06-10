@@ -1,3 +1,9 @@
+<div class="ordenar-por">
+    <p>Ordenar por:</p>
+    <button (click)="ordenarPorFecha()">Fecha</button>
+    <button (click)="ordenarPorLikes()">Likes</button>
+</div>
+
 <div class="contenedor-publicaciones">
 
     @for(publicacion of publicaciones; track $index){
