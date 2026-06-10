@@ -29,14 +29,14 @@ export default class MiPerfil {
   crearPublicacionFlag: boolean = false;
 
   ngOnInit() {
-    this.usuario = this.authService.usuarioLogueado.usuario;
+    this.usuario = this.authService.usuarioLogueado?.usuario;
     this.cargarPublicaciones();
   }
 
   cargarPublicaciones() {
     const offset = (this.paginaActual - 1) * this.limit;
 
-    this.peticiones.peticionCargarPublicaciones(offset, this.limit, this.orden, this.usuario._id)
+    this.peticiones.peticionCargarPublicaciones(offset, this.limit, this.orden, this.usuario?._id)
       .subscribe({
         next: (resp: any) => {
           console.log("RESPUESTA", resp);
@@ -64,8 +64,8 @@ export default class MiPerfil {
 
     const formData = new FormData();
 
-    formData.append('idUsuario', this.usuario._id);
-    formData.append('nombreDeUsuario', this.usuario.nombreDeUsuario);
+    formData.append('idUsuario', this.usuario?._id);
+    formData.append('nombreDeUsuario', this.usuario?.nombreDeUsuario);
     formData.append('descripcion', this.formulario.value.descripcion ?? '');
     formData.append('fecha', new Date().toISOString());
 

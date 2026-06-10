@@ -4,16 +4,16 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { PublicacionesModule } from './publicaciones/publicaciones.module';
-import { AutenticacionModule } from './autenticacion/autenticacion.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { AutenticacionModule } from './autenticacion/autenticacion.module';
 
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     PublicacionesModule,
-    AutenticacionModule,
     UsuariosModule,
+    AutenticacionModule,
     MongooseModule.forRoot(process.env.MONGO_URI!), // Conexión de mongo!
   ],
   controllers: [AppController],

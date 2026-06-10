@@ -3,6 +3,8 @@ import { inject } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../services/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -11,6 +13,10 @@ import { environment } from '../../../environments/environment';
   styleUrl: './registro.css',
 })
 export default class Registro {
+
+  constructor(
+    private authService: AuthService,
+    private router: Router) { }
 
   http = inject(HttpClient);
 
@@ -71,10 +77,9 @@ export default class Registro {
         next: (respuesta) => {
 
           console.log('Se registro el Usuario en MongoDB. A continuación se ejecuta la respuesta');
-          console.log(respuesta); //Imprime el return de autenticacion.service.ts. Después se debe eliminar
-
-
+          this.authService.guardarSesion(respuesta);
           this.registroExitoso = true;
+          this.router.navigate(['/publicaciones']);
         },
 
         error: (error) => {

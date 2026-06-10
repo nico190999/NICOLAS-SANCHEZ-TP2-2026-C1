@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Publicacion } from './publicacion/publicacion';
 import { ChangeDetectorRef } from '@angular/core';
 import { PeticionesPublicacionesservice } from './peticiones.publicaciones.service';
+import { AuthService } from '../../auth/services/auth-service';
 
 @Component({
   selector: 'app-publicaciones',
@@ -22,10 +23,13 @@ export default class PublicacionesComponent {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private peticiones: PeticionesPublicacionesservice
+    private peticiones: PeticionesPublicacionesservice,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
+    console.log("Componente de publicaciones cargado")
+    console.log(this.authService.usuarioLogueado)
     this.cargarPublicaciones();
   }
 

@@ -12,6 +12,7 @@ export class PeticionesPublicacionesservice {
   ) { }
 
   peticionCargarPublicaciones(offset: number, limit: number, orden: string, usuarioId?: string) {
+    console.log("Ingresa a petición para obtener las publicaciones")
     let url = `${environment.apiUrl}/publicaciones?offset=${offset}&limit=${limit}&orden=${orden}`
 
     if (usuarioId) {

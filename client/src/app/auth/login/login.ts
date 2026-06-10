@@ -40,11 +40,11 @@ export default class Login {
     this.http.post(`${environment.apiUrl}/auth/login`, this.formulario.value)
       .subscribe({
         next: (respuesta) => {
-          console.log('Login exitoso. Id del usuario a continuación');
+          console.log('Respuesta login');
+          console.log(respuesta)
+          this.authService.guardarSesion(respuesta);
           this.authService.logueoExitoso = true;
-          this.authService.usuarioLogueado = respuesta;
           this.router.navigate(['/publicaciones']);
-          console.log(this.authService.usuarioLogueado.usuario._id)
         },
 
         error: (error) => {

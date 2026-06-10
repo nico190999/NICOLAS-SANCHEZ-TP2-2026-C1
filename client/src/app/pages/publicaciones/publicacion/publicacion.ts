@@ -74,11 +74,13 @@ export class Publicacion implements OnInit {
 
     const nuevoComentario = {
       idPublicacion: this.idPublicacion,
-      idUsuario: this.authService.usuarioLogueado.usuario._id,
-      nombreDeUsuario: this.authService.usuarioLogueado.usuario.nombreDeUsuario,
+      idUsuario: this.authService.usuarioLogueado?.usuario?._id,
+      nombreDeUsuario: this.authService.usuarioLogueado?.usuario?.nombreDeUsuario,
       mensaje: this.formularioComentario.value.comentario,
       fecha: new Date().toISOString()
     };
+
+    console.log(nuevoComentario)
 
     this.peticiones.peticionAgregarComentario(nuevoComentario)
       .subscribe({
@@ -142,7 +144,12 @@ export class Publicacion implements OnInit {
 
   darLike() {
     const usuarioId =
-      this.authService.usuarioLogueado.usuario._id;
+      this.authService.usuarioLogueado?.usuario?._id;
+
+
+    if (!usuarioId) {
+      return;
+    }
 
     this.peticiones.peticionDarLike(this.idPublicacion, usuarioId)
       .subscribe({
@@ -157,8 +164,11 @@ export class Publicacion implements OnInit {
   }
 
   quitarLike() {
-    const usuarioId =
-      this.authService.usuarioLogueado.usuario._id;
+    const usuarioId = this.authService.usuarioLogueado?.usuario?._id;
+
+    if (!usuarioId) {
+      return;
+    }
 
     this.peticiones.peticionQuitarLike(this.idPublicacion, usuarioId)
       .subscribe({
@@ -204,11 +214,20 @@ export class Publicacion implements OnInit {
   }
 
   esMia(): boolean {
-    return this.authService.usuarioLogueado.usuario._id === this.idUsuario;
+
+    return this.authService.usuarioLogueado?.usuario?._id === this.idUsuario;
+
   }
 
   usuarioYaDioLike(): boolean {
-    const usuarioId = this.authService.usuarioLogueado.usuario._id;
+
+    const usuarioId =
+      this.authService.usuarioLogueado?.usuario?._id;
+
+    if (!usuarioId) {
+      return false;
+    }
+
     return this.usuariosLikes.includes(usuarioId);
   }
 

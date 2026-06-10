@@ -1,54 +1,72 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AutenticacionService } from './autenticacion.service';
-import { CreateAutenticacionDto } from './dto/create-autenticacion.dto';
-import { LoginAutenticacionDto } from './dto/login-autenticacion.dto';
-/* import { UpdateAutenticacionDto } from './dto/update-autenticacion.dto'; */
+import { Controller, Post, Body, UnauthorizedException, ConsoleLogger } from "@nestjs/common";
+import { AutenticacionService } from "./autenticacion.service";
 
-@Controller('auth')
+
+@Controller("auth")
 export class AutenticacionController {
-  constructor(private readonly autenticacionService: AutenticacionService) {}
 
-  @Post('registro')
-  create(@Body() createAutenticacionDto: CreateAutenticacionDto) {
-    return this.autenticacionService.registro(createAutenticacionDto);
+
+  constructor(
+    private authService: AutenticacionService
+  ) { }
+
+  @Post("login")
+  login(@Body() dto: any) {
+
+    const usuario = {
+      _id: "123",
+      correo: dto.correo,
+      nombreDeUsuario: "nicolas",
+      rol: "usuario"
+    };
+
+    const token =
+      this.authService.generarToken(usuario);
+
+    return { token, usuario };
   }
 
-  @Post('login')
-  login(@Body() loginDto: LoginAutenticacionDto){
-    return this.autenticacionService.login(loginDto);
+  @Post("autorizar")
+  autorizar(@Body() body: any) {
+
+    try {
+
+      console.log("TOKEN BACK:", body.token);
+
+      const datos =
+        this.authService.validarToken(body.token);
+
+      console.log("PAYLOAD:", datos);
+
+      return datos;
+
+    } catch (error) {
+
+      console.log("ERROR JWT:", error);
+
+      throw new UnauthorizedException();
+
+    }
+
   }
+
+  @Post("refrescar")
+  refrescar(@Body() body: any) {
+    try {
+      const payload =
+        this.authService.validarToken(body.token);
+      const nuevoToken =
+        this.authService.generarToken(payload);
+      return {
+        token: nuevoToken
+      };
+    } catch (error) {
+      console.log(error)
+      throw new UnauthorizedException();
+    }
+  }
+
 
 }
 
-
-
-
-
-
-
-
-
-
-/* 
-
-@Get()
-  findAll() {
-    return this.autenticacionService.findAll();
-  }
-
-
-@Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.autenticacionService.findOne(+id);
-  } */
-
-  /* @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAutenticacionDto: UpdateAutenticacionDto) {
-    return this.autenticacionService.update(+id, updateAutenticacionDto);
-  } */
-
-  /* @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.autenticacionService.remove(+id);
-  } */
-
+// localStorage.clear()

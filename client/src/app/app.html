@@ -1,22 +1,43 @@
-@if(!this.authService.logueoExitoso){
-  <div class="auth-bar">
+@if(authService.cargando){
 
-  <button routerLink="auth/login">Login</button>
-  <button routerLink="auth/registrarse">Registrarse</button>
+<div class="loading">
+
+  <h2>Cargando...</h2>
+
+  <div class="spinner"></div>
 
 </div>
-}
 
-@if (this.authService.logueoExitoso){
+
+}
+@else {
+
+
+@if(authService.logueoExitoso){
+
 <div class="navigation-bar">
 
-  <button routerLink="publicaciones">Publicaciones</button>
-  <button [routerLink]="['/perfil', authService.usuarioLogueado.usuario._id]">Mi perfil</button>
-  <button (click)="cerrarSesion()">Cerrar sesion</button>
+  <button routerLink="publicaciones">
+    Publicaciones
+  </button>
+
+
+  <button [routerLink]="['/perfil', authService.usuarioLogueado?.usuario?._id]">
+    Mi perfil
+  </button>
+
+
+  <button (click)="cerrarSesion()">
+    Cerrar sesión
+  </button>
+
 
 </div>
+
 }
 
-<div>
-  <router-outlet></router-outlet>
-</div>
+
+<router-outlet></router-outlet>
+
+
+}

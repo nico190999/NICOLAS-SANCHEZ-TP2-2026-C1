@@ -93,7 +93,7 @@
 
             @for(
             comentario of listaComentarios;
-            track comentario._id
+            track comentario?._id
             ){
 
             <div class="comentario">
@@ -106,7 +106,7 @@
                     </strong>
 
 
-                    @if (comentario.idUsuario == authService.usuarioLogueado.usuario._id) {
+                    @if (comentario.idUsuario == authService.usuarioLogueado?.usuario?._id) {
                     <button class="btn-modificar" (click)="editarComentario(comentario)">
                         Modificar
                     </button>
