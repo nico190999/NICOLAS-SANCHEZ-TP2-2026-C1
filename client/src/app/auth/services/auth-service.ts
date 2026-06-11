@@ -24,9 +24,11 @@ export class AuthService {
   autorizar() {
     const token = localStorage.getItem("token");
     console.log("TOKEN ENVIADO:", token);
+
     if (!token) {
       return throwError(() => ({ mensaje: "No existe sesión" }));
     }
+    
     return this.http.post(`${environment.apiUrl}/auth/autorizar`, { token });
   }
 

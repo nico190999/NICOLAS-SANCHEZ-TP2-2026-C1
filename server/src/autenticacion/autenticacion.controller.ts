@@ -3,6 +3,7 @@ import { AutenticacionService } from "./autenticacion.service";
 import { UsuariosService } from "src/usuarios/usuarios.service";
 import { LoginAutenticacionDto } from "./dto/login-autenticacion.dto";
 import * as bcrypt from 'bcrypt';
+import { CreateAutenticacionDto } from "./dto/create-autenticacion.dto";
 
 
 @Controller("auth")
@@ -17,10 +18,14 @@ export class AutenticacionController {
   @Post("login")
   async login(@Body() dto: LoginAutenticacionDto) {
 
+    /* console.log("DTO RECIBIDO:", dto); */
+
     const usuario = await this.usuarioService.buscarPorCorreo(dto.correo);
     if (!usuario) {
       throw new UnauthorizedException("Usuario no encontrado");
     }
+
+    /* console.log("USUARIO ENCONTRADO:", usuario); */
 
     const contraseñaCorrecta = await bcrypt.compare(
       dto.contrasenia,
@@ -45,6 +50,12 @@ export class AutenticacionController {
 
     return { token, usuario: usuarioRespuesta };
   }
+
+  @Post('registro')
+  create(@Body() createAutenticacionDto: CreateAutenticacionDto) {
+    return this.authService.registro(createAutenticacionDto);
+  }
+
 
   @Post("autorizar")
   async autorizar(@Body() body: any) {

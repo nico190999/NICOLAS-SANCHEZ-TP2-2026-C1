@@ -122,11 +122,9 @@ export class Publicacion implements OnInit {
           this.offsetComentarios += resp.length;
           this.cdr.detectChanges();
         },
-
         error: (err) => {
           console.log(err)
         }
-
       });
 
   }

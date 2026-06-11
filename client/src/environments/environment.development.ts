@@ -1,5 +1,5 @@
 export const environment = {
-    apiUrl: "https://nicolas-sanchez-tp-2-2026-c1-server.vercel.app"
+    apiUrl: "http://localhost:3000"
 };
 
 

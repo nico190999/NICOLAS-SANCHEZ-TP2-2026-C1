@@ -14,18 +14,14 @@ export class ComentariosService {
         private comentarioModel: Model<Comentario>
     ) { }
 
+    
     async crearComentario(
         dto: CrearComentarioDto
     ) {
-
         return await this.comentarioModel.create({
-
             ...dto,
-
             modificado: false
-
         });
-
     }
 
 
@@ -34,17 +30,15 @@ export class ComentariosService {
         offset: number,
         limit: number
     ) {
-
         return await this.comentarioModel
             .find({ idPublicacion })
             .sort({ fecha: -1 })
             .skip(offset)
             .limit(limit);
-
     }
 
-    async modificarComentario(idComentario: string, dto: ModificarComentarioDto) {
 
+    async modificarComentario(idComentario: string, dto: ModificarComentarioDto) {
         return await this.comentarioModel.findByIdAndUpdate(
             idComentario,
             {
@@ -55,7 +49,6 @@ export class ComentariosService {
                 returnDocument: "after"
             }
         );
-
     }
 
 }

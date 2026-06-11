@@ -34,10 +34,16 @@ export class UsuariosService {
   }
 
   async buscarPorCorreo(correo: string) {
-    console.log("buscando correo", correo)
-    return await this.usuarioModel.findOne({
+    /* console.log("buscando correo", correo)
+    console.log("COLECCION:", this.usuarioModel.collection.name); */
+
+    const usuario = await this.usuarioModel.findOne({
       correo: correo
     });
+
+    /* console.log("USUARIO ENCONTRADO:", usuario); */
+
+    return usuario;
   }
 
   async buscarPorId(id: string) {

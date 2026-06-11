@@ -5,6 +5,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink],
@@ -30,14 +31,17 @@ export class App {
           this.authService.usuarioLogueado = resp.usuario;
           this.authService.logueoExitoso = true;
           this.authService.cargando = false;
+          this.router.navigate(['/publicaciones'])
           this.cdr.detectChanges()
         },
 
         error: (err) => {
-          console.log("Sin sesion");
+          console.log("Token expirado, se vuelve al login");
           this.authService.usuarioLogueado = null;
           this.authService.logueoExitoso = false;
           this.authService.cargando = false;
+          this.router.navigate(['/auth/login'])
+          this.cdr.detectChanges()
         }
       });
   }

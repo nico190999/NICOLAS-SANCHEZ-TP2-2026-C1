@@ -2,6 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 
 @Schema({
+/* Se definen los atributos de la clase
+DEFINE LOS CAMPOS QUE SE VAN A GUARDAR EN MONGODB
+*/
     collection: "usuarioregistros"
 })
 export class Usuario {
@@ -35,7 +38,7 @@ export class Usuario {
     descripcionBreve: string;
 
 
-    @Prop()
+    @Prop({default: "usuario"})
     perfil: string;
 
 
