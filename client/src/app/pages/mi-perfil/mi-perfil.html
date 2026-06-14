@@ -1,10 +1,37 @@
 <div class="personal-info">
 
-    <p><strong>Usuario:</strong> {{usuario?.nombreDeUsuario}}</p>
-    <p><strong>Nombre:</strong> {{usuario?.nombre}}</p>
-    <p><strong>Apellido:</strong> {{usuario?.apellido}}</p>
-    <p><strong>Fecha de nacimiento:</strong> {{usuario?.fechaNacimiento}}</p>
-    <p><strong>Descripción:</strong> {{usuario?.descripcionBreve}}</p>
+    <div class="profile-image">
+        <img [src]="usuario?.imagen" alt="Imagen de usuario">
+    </div>
+
+    <div class="user-data">
+
+        <p>
+            <strong>Usuario:</strong>
+            <span>{{usuario?.nombreDeUsuario}}</span>
+        </p>
+
+        <p>
+            <strong>Nombre:</strong>
+            <span>{{usuario?.nombre}}</span>
+        </p>
+
+        <p>
+            <strong>Apellido:</strong>
+            <span>{{usuario?.apellido}}</span>
+        </p>
+
+        <p>
+            <strong>Fecha de nacimiento:</strong>
+            <span>{{usuario?.fechaNacimiento}}</span>
+        </p>
+
+        <p>
+            <strong>Descripción:</strong>
+            <span>{{usuario?.descripcionBreve}}</span>
+        </p>
+
+    </div>
 
 </div>
 

@@ -1,17 +1,56 @@
-/* Contenedor de datos personales */
 .personal-info {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #f8f9fa;
+    width: 350px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
 }
 
-.personal-info p {
-    margin: 8px 0;
-    font-size: 16px;
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ddd;
+    margin-bottom: 20px;
 }
+
+
+.user-data {
+    width: 100%;
+}
+
+
+.user-data p {
+    display: flex;
+    flex-direction: column;
+    margin: 12px 0;
+    color: #555;
+    font-size: 15px;
+
+}
+
+
+.user-data strong {
+    color: #222;
+    margin-bottom: 4px;
+
+}
+
+
+.user-data span {
+    background: #f4f4f4;
+    padding: 8px;
+    border-radius: 8px;
+    color: #333;
+}
+
 
 /* Botones */
 button {

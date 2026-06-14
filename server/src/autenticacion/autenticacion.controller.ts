@@ -1,9 +1,18 @@
-import { Controller, Post, Body, UnauthorizedException } from "@nestjs/common";
+import { Controller, Post, Body, UnauthorizedException, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { AutenticacionService } from "./autenticacion.service";
 import { UsuariosService } from "src/usuarios/usuarios.service";
 import { LoginAutenticacionDto } from "./dto/login-autenticacion.dto";
 import * as bcrypt from 'bcrypt';
 import { CreateAutenticacionDto } from "./dto/create-autenticacion.dto";
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: 'dbll45f5w',
+  api_key: '167339771336668',
+  api_secret: 'Euba_SQ64MkMasWYo6e9DeoZJdw',
+});
 
 
 @Controller("auth")
@@ -45,15 +54,42 @@ export class AutenticacionController {
       nombreDeUsuario: usuario.nombreDeUsuario,
       descripcionBreve: usuario.descripcionBreve,
       fechaNacimiento: usuario.fechaNacimiento,
-      perfil: usuario.perfil
+      perfil: usuario.perfil,
+      imagen: usuario.imagen
     };
 
     return { token, usuario: usuarioRespuesta };
   }
 
   @Post('registro')
-  create(@Body() createAutenticacionDto: CreateAutenticacionDto) {
-    return this.authService.registro(createAutenticacionDto);
+  //Subir imagen
+  @UseInterceptors(
+    FileInterceptor('imagen', {
+      storage: new CloudinaryStorage({
+        cloudinary,
+        params: {
+          public_id: (req, file) =>
+            `IMG_${Date.now()}_archivos`,
+        },
+      }),
+    }),
+  )
+
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createAutenticacionDto: CreateAutenticacionDto,
+  ) {
+
+    if (file) {
+      createAutenticacionDto.imagen = file.path;
+    }
+    const usuario = await this.authService.registro(createAutenticacionDto);
+
+    console.log("Usuario generado", usuario)
+
+    const token = this.authService.generarToken(usuario);
+
+    return { token, usuario };
   }
 
 

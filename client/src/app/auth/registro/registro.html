@@ -164,6 +164,16 @@
         }
     </label>
 
+    <label>
+        <input
+    type="file"
+    formControlName="imagen"
+    (change)="seleccionarArchivo($event)">
+
+    </label>
+
+
+
 
     <button [disabled]="!formulario.valid" type="submit" class="submit">Registrarse</button>
 </form>

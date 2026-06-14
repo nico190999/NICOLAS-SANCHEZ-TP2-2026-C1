@@ -31,6 +31,7 @@ export default class MiPerfil {
   ngOnInit() {
     this.usuario = this.authService.usuarioLogueado;
     this.cargarPublicaciones();
+    console.log("Datos del usuario",this.usuario)
   }
 
   cargarPublicaciones() {

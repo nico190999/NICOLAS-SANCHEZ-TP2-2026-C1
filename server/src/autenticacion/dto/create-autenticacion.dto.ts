@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsString, IsOptional } from "class-validator";
 
 /* Valida y define los datos que entran, es decir los que le manda angular en this.http.post(ruta, LOS DATOS QUE LE MANDAN  ) */
 
@@ -27,5 +27,9 @@ export class CreateAutenticacionDto {
 
     @IsString()
     descripcionBreve: string
+
+    @IsOptional()
+    @IsString()
+    imagen?: string;
 
 }

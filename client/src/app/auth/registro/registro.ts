@@ -19,6 +19,7 @@ export default class Registro {
     private router: Router) { }
 
   http = inject(HttpClient);
+  archivoSeleccionado!: File;
 
   /* VALIDACIONES DEL FORMULARIO */
   formulario = new FormGroup({
@@ -39,10 +40,11 @@ export default class Registro {
 
     descripcionBreve: new FormControl("", Validators.required),
 
+    imagen: new FormControl(null),
+
   })
 
   usuarioYaRegistrado = false;
-  registroExitoso = false;
 
 
 
@@ -53,8 +55,14 @@ export default class Registro {
     );
   }
 
-  registrar() {
+  seleccionarArchivo(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.archivoSeleccionado = input.files[0];
+    }
+  }
 
+  registrar() {
     //PARA QUE FUNCIONE EL REGISTRO SE DEBE HACER "NEST START" DEL LADO DEL SERVIDOR
 
     // Si hay errores en el formularios, hace marcar los mismos
@@ -63,12 +71,30 @@ export default class Registro {
       return;
     }
 
+    const formData = new FormData();
+
+    formData.append('nombre', this.formulario.value.nombre ?? '');
+    formData.append('apellido', this.formulario.value.apellido ?? '');
+    formData.append('correo', this.formulario.value.correo ?? '');
+    formData.append('nombreDeUsuario', this.formulario.value.nombreDeUsuario ?? '');
+    formData.append('contrasenia', this.formulario.value.contrasenia ?? '');
+    formData.append('repetirContrasenia', this.formulario.value.repetirContrasenia ?? '');
+    formData.append('fechaNacimiento', this.formulario.value.fechaNacimiento ?? '');
+    formData.append('descripcionBreve', this.formulario.value.descripcionBreve ?? '');
+
+
+
+
+    if (this.archivoSeleccionado) {
+      formData.append('imagen', this.archivoSeleccionado);
+    }
+
     //Realiza petición de tipo POST, y se le envian los valores del formulario (this.formulario.value)
     this.http.post(`${environment.apiUrl}/auth/registro`, /* La URL debe coincidir con la del controlador (autenticacion.controller.ts en @Controller("La ruta")). 
     Para vercel usar https://nicolas-sanchez-tp-2-2026-c1-server.vercel.app/auth/registro.
     Para servidor local usar http://localhost:3000/registro (SE TIENE QUE INICIALIZAR NEST EN EL SERVIDOR MEDIANTE "nest start")
     */
-      this.formulario.value
+      formData
     )
       //En cuanto llegue la respuesta llegue, se ejecuta el subscribe
       .subscribe({
@@ -76,9 +102,9 @@ export default class Registro {
         //Si sale todo bien se ejecuta el next
         next: (respuesta) => {
 
-          console.log('Se registro el Usuario en MongoDB. A continuación se ejecuta la respuesta');
+          console.log('Se registro el Usuario en MongoDB. A continuación se ejecuta la respuesta', respuesta);
           this.authService.guardarSesion(respuesta);
-          this.registroExitoso = true;
+          this.authService.logueoExitoso = true;
           this.router.navigate(['/publicaciones']);
         },
 

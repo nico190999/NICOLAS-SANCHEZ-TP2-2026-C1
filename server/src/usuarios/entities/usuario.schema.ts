@@ -41,6 +41,9 @@ export class Usuario {
     @Prop({default: "usuario"})
     perfil: string;
 
+    @Prop()
+    imagen: string;
+
 
 }
 
