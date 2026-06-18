@@ -4,6 +4,7 @@ import { AuthService } from './auth/services/auth-service';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import { SesionService } from './auth/services/sesion.service';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class App {
 
   constructor(
     public authService: AuthService,
+    public sesionService: SesionService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -52,6 +54,35 @@ export class App {
     this.authService.usuarioLogueado = null;
     this.authService.cerrarSesion();
     this.router.navigate(['/auth/login']);
+    this.sesionService.mostrarModal = false;
+    this.cdr.detectChanges()
+  }
+
+
+
+  extenderSesion() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.log("No existe token");
+      return;
+    }
+
+    this.sesionService.extenderSesion(token)
+      .subscribe({
+        next: (respuesta) => {
+          localStorage.setItem(
+            "token",
+            respuesta.token
+          );
+          this.sesionService.reiniciarContador();
+          this.cdr.detectChanges()
+        },
+        error: (err) => {
+          console.log("ERROR REFRESCANDO TOKEN", err);
+          this.sesionService.mostrarModal = false;
+        }
+      })
   }
 
 }

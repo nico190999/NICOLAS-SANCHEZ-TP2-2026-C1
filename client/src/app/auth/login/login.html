@@ -23,13 +23,10 @@
     </label>
     <button type="submit" class="submit">Iniciar Sesión</button>
 </form>
+
+    @if(usuarioInhabilitado){
+        <p appResaltar >Tu usuario se encuentra inhabilitado</p>
+    }
     <button (click)="loginRapido()">Login Rapido</button>
     <button (click)="loginRapido2()">Login Rapido 2</button>
-
-
-<input
-    type="file"
-    (change)="seleccionarArchivo($event)"
-/>
-
-<button (click)="subir()">Subir</button>
+    <button (click)="loginRapidoAdmin()">Login Rapido Admin</button>

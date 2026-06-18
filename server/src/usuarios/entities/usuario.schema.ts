@@ -44,6 +44,9 @@ export class Usuario {
     @Prop()
     imagen: string;
 
+    @Prop({default: true})
+    active: boolean;
+
 
 }
 

@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,24 +11,16 @@ export class UsuariosService {
     private usuarioModel: Model<Usuario>
   ) { }
 
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
+  async obtenerUsuarios() {
+    return await this.usuarioModel.find();
   }
 
-  findAll() {
-    return `This action returns all usuarios`;
+  async inhabilitarUsuario(id: string) {
+    return await this.usuarioModel.findByIdAndUpdate(id,{active: false},{returnDocument: 'after'});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
-  }
-
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async habilitarUsuario(id: string) {
+    return await this.usuarioModel.findByIdAndUpdate(id,{active: true},{returnDocument: 'after'});
   }
 
   async buscarPorCorreo(correo: string) {

@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { CreateAutenticacionDto } from "./dto/create-autenticacion.dto";
 import * as bcrypt from 'bcrypt';
@@ -22,18 +22,26 @@ export class AutenticacionService {
 
 
   generarToken(usuario: any) {
-    const datos = usuario.toObject();
+    const datos = usuario.toObject
+      ? usuario.toObject()
+      : usuario;
     const payload = {
       _id: datos._id,
       correo: datos.correo,
       nombreDeUsuario: datos.nombreDeUsuario,
       perfil: datos.perfil
     };
-    /* console.log("JWT PAYLOAD:", payload); */
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign(
+      payload,
+      {
+        expiresIn: '15m'
+      }
+    );
   }
 
   validarToken(token: string) {
+    console.log("TOKEN A VALIDAR:");
+    console.log(token);
     const validacionToken = this.jwtService.verify(token)
     console.log("Validación de token:", validacionToken)
     return validacionToken;
@@ -46,9 +54,13 @@ export class AutenticacionService {
 
     const usuarioCreado = await this.usuarioModel.create(createAutenticacionDto); //Crea un nuevo documento en mongo (.create) de los datos que vienen en createAutenticacionDto. SOLO SE GUARDAN LOS DATOS QUE EL SHEMA (UsuarioRegistro -> UsuarioModel) PERMITE. createAutenticacionDto es comparado con UsuarioModel, si en este último tiene atributos que falten o esten de más, se agregaran estos últimos, por que el schema es lo que se sube a mongoose
 
-    console.log("Se creo el ususario: ", usuarioCreado)
-
     return usuarioCreado; //Esto después se puede eliminar, se usa solo para ver la respuesta del usuario creado por consola en registro.ts
+  }
+
+  validarTokenSinFallo(token: string) {
+    return this.jwtService.verify(token, {
+      ignoreExpiration: true
+    });
   }
 
 

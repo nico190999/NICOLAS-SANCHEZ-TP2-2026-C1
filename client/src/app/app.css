@@ -36,3 +36,156 @@
     }
 
 }
+
+.navigation-bar {
+
+    width: 100%;
+
+    background: #dae5f0;
+
+    padding: 15px 25px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+
+}
+
+
+/* Botones */
+
+.navigation-bar button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+}
+
+
+/* Hover */
+
+.navigation-bar button:hover {
+
+    background: #217dbb;
+
+    transform: translateY(-2px);
+
+}
+
+
+
+/* Botón cerrar sesión */
+
+.navigation-bar button:last-child {
+
+    background: #e74c3c;
+
+}
+
+
+
+.navigation-bar button:last-child:hover {
+
+    background: #c0392b;
+
+}
+
+
+
+/* Cuando no está logueado */
+
+.navigation-bar button:first-child {
+
+    min-width: 130px;
+
+}
+
+
+
+/* Separación visual */
+
+.navigation-bar button:active {
+
+    transform: scale(0.95);
+
+}
+
+
+
+/* Router outlet contenido */
+
+router-outlet {
+
+    display: block;
+
+}
+
+
+
+/* Responsive */
+
+@media(max-width:700px) {
+
+
+    .navigation-bar {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+
+    .navigation-bar button {
+        width: 100%;
+        max-width: 300px;
+    }
+
+}
+
+.router-outlet-class {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-sesion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+
+.contenido-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.contenido-modal button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

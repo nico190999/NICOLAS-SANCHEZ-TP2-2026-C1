@@ -6,9 +6,6 @@ import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import { UseGuards } from '@nestjs/common';
-import { Req } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/autenticacion/jwt.guard';
 
 cloudinary.config({
   cloud_name: 'dbll45f5w',
@@ -21,32 +18,9 @@ cloudinary.config({
 //El controlador unicamente lo que hace es recibir las peticiones de angular (meidante las rutas /publicaciones/etc), obtiene los parametros y llama a los servicios que se encargan de realizar la función 
 @Controller('publicaciones')
 export class PublicacionesController {
-  constructor(private readonly publicacionesService: PublicacionesService) { }
-
-  //----------------------------------- SUBIDA DE IMAGENES -------------------------------------
-
-  logger = new Logger('PETICIONES', { timestamp: true });
-
-  @Post('subirImagen')
-  @UseInterceptors(
-    FileInterceptor('archivo', {
-      storage: new CloudinaryStorage({
-        cloudinary: cloudinary,
-        params: {
-          public_id: (req, file) => `IMG_${Date.now()}_archivos`,
-        },
-      }),
-    }),
-  )
-  async subidaDeArchivos(@UploadedFile() file: Express.Multer.File) {
-    return {
-      url: file.path
-    };
-  }
-
-  //----------------------------------- SUBIDA DE IMAGENES -------------------------------------
-
-
+  constructor(
+    private readonly publicacionesService: PublicacionesService
+  ) { }
 
 
   @Post('publicar')
@@ -85,6 +59,15 @@ export class PublicacionesController {
     );
   }
 
+  @Get('publicacion/:id')
+  obtenerPublicacion(
+    @Param('id') id: string
+  ) {
+
+    return this.publicacionesService.obtenerPublicacion(id);
+
+  }
+
   @Delete(':id') //BAJA LOGICA, HACE DESAPARECER LA PUBLICACIÓN, NO LA ELIMINA
   //Nest interpreta el :id como el id de la publicación enviada en Angular
   eliminarPorId(@Param('id') id: string) { //Param se encarga de tomar el valor que que venga de la URL que dice :id y lo guarda en una nueva varibale denominada id
@@ -94,11 +77,11 @@ export class PublicacionesController {
 
 
 
-  @UseGuards(JwtAuthGuard)
-  @Post(':id/like')
-  darLike(@Param('id') idPublicacion: string, @Req() req) {
-
-    const usuarioId = req.user._id;
+  @Post(':idPublicacion/like')
+  darLike(
+    @Param('idPublicacion') idPublicacion: string,
+    @Body('usuarioId') usuarioId: string
+  ) {
 
     return this.publicacionesService.darLike(
       idPublicacion,
@@ -115,29 +98,5 @@ export class PublicacionesController {
   ) {
     return this.publicacionesService.quitarLike(idPublicacion, usuarioId);
   }
+
 }
-
-/* 
-
-@Get()
-  findAll() {
-    return this.publicacionesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.publicacionesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePublicacioneDto: UpdatePublicacioneDto) {
-    return this.publicacionesService.update(+id, updatePublicacioneDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.publicacionesService.remove(+id);
-  }
-
-
-*/

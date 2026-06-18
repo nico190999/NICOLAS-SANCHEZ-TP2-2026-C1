@@ -1,0 +1,216 @@
+@if(habilitaroFormularioRegistro){
+
+<form class="form" [formGroup]="formulario" (ngSubmit)="registrar()">
+    <!-- Para que funcione formGroup se debe importar  ReactiveFormModule en registro.ts-->
+    <p class="title">Formulario de Registro </p>
+
+    <!-- CAMPO DE NOMBRE -->
+    <label>
+        <input type="text" formControlName="nombre" class="input"
+            [class.error]="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">
+        <span>Nombre</span>
+
+        @if(formulario.get('nombre')?.touched && formulario.get('nombre')?.errors){
+        <p class="error-text">
+            <!-- TEXTO DE ERRORES DENDIENDO DE CUAL SE TRATE -->
+            @if(formulario.get('nombre')?.errors?.['required']){
+            El nombre es obligatorio
+            }
+            @if(formulario.get('nombre')?.errors?.['minlength']){
+            Mínimo 3 caracteres
+            }
+            @if(formulario.get('nombre')?.errors?.['maxlength']){
+            Maximo 15 caracteres
+            }
+        </p>
+        }
+    </label>
+
+    <!-- CAMPO DE APELLIDO -->
+    <label>
+        <input type="text" formControlName="apellido" class="input"
+            [class.error]="formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched">
+        <span>Apellido</span>
+
+        @if(formulario.get('apellido')?.touched && formulario.get('apellido')?.errors){
+        <p class="error-text">
+            @if(formulario.get('apellido')?.errors?.['required']){
+            El apellido es obligatoria
+            }
+        </p>
+        }
+    </label>
+
+    <!-- CAMPO DE EMAIL -->
+    <label>
+        <input type="email" formControlName="correo" class="input"
+            [class.error]="formulario.get('correo')?.invalid && formulario.get('correo')?.touched">
+        <span>Correo</span>
+
+        @if(formulario.get('correo')?.touched && formulario.get('correo')?.errors){
+        <p class="error-text">
+            @if(formulario.get('correo')?.errors?.['required']){
+            El correo es obligatorio
+            }
+            @if(formulario.get('correo')?.errors?.['correo']){
+            Correo inválido
+            }
+        </p>
+        }
+    </label>
+
+    <!-- CAMPO DE NOMBRE DE USUARIO -->
+    <label>
+        <input type="text" formControlName="nombreDeUsuario" class="input"
+            [class.error]="formulario.get('nombreDeUsuario')?.invalid && formulario.get('nombreDeUsuario')?.touched">
+        <span>Nombre de usuario</span>
+
+        @if(formulario.get('nombreDeUsuario')?.touched && formulario.get('nombreDeUsuario')?.errors){
+        <p class="error-text">
+            @if(formulario.get('nombreDeUsuario')?.errors?.['required']){
+            El nombre de usuario es obligatorio
+            }
+        </p>
+        }
+    </label>
+
+    <!-- CAMPO DE CONTRASEÑA -->
+    <label>
+        <input type="password" formControlName="contrasenia" class="input"
+            [class.error]="formulario.get('contrasenia')?.invalid && formulario.get('contrasenia')?.touched">
+        <span>Contraseña</span>
+
+        @if(formulario.get('contrasenia')?.touched && formulario.get('contrasenia')?.errors){
+        <p class="error-text">
+            @if(formulario.get('contrasenia')?.errors?.['required']){
+            La constraseña es obligatoria
+            }
+        </p>
+        }
+    </label>
+
+    <!-- CAMPO DE REPETIR CONTRASEÑA -->
+    <label>
+        <input type="password" formControlName="repetirContrasenia" class="input"
+            [class.error]="formulario.get('repetirContrasenia')?.invalid && formulario.get('repetirContrasenia')?.touched">
+        <span>Repetir contraseña</span>
+
+        @if(formulario.get('repetirContrasenia')?.touched && formulario.get('repetirContrasenia')?.errors){
+        <p class="error-text">
+            @if(formulario.get('repetirContrasenia')?.errors?.['required']){
+            La constraseña es obligatoria
+            }
+        </p>
+        }
+    </label>
+
+    <!-- SI LAS CONTRASEÑAS NO COINCIDEN SALTA ERROR -->
+    @if(!contraseniasCoinciden()
+    && formulario.get('repetirContrasenia')?.touched){
+    <p class="error-text">
+        Las contraseñas no coinciden
+    </p>
+    }
+
+    <!-- CAMPO DE F. DE NACIMIENTO -->
+    <label>
+        <input type="date" formControlName="fechaNacimiento" class="input">
+
+        <span>Fecha de nacimiento</span>
+
+        @if(formulario.get('fechaNacimiento')?.touched &&
+        formulario.get('fechaNacimiento')?.errors){
+
+        <p class="error-text">
+            La fecha de nacimiento es obligatoria
+        </p>
+        }
+    </label>
+
+    <!-- CAMPO DE DESCRIPCIÓN BREVE -->
+    <label>
+        <input type="text" formControlName="descripcionBreve" class="input"
+            [class.error]="formulario.get('descripcionBreve')?.invalid && formulario.get('descripcionBreve')?.touched">
+        <span>Descripción breve</span>
+
+        @if(formulario.get('descripcionBreve')?.touched && formulario.get('descripcionBreve')?.errors){
+        <p class="error-text">
+            @if(formulario.get('descripcionBreve')?.errors?.['required']){
+            La descripción breve es obligatoria
+            }
+        </p>
+        }
+    </label>
+
+    <label>
+        <input type="file" formControlName="imagen" (change)="seleccionarArchivo($event)">
+    </label>
+
+    <div class="campo-perfil">
+
+        <label>
+            Tipo de usuario
+        </label>
+
+        <select class="select-perfil" formControlName="perfil">
+            <option value="usuario">
+                Usuario
+            </option>
+            <option value="administrador">
+                Administrador
+            </option>
+        </select>
+    </div>
+
+    <button [disabled]="!formulario.valid" type="submit" class="submit">
+        Registrarse
+    </button>
+
+</form>
+
+<button class="btn-volver" (click)="inhabilitarFormularioRegistro()">
+    Volver
+</button>
+
+}@else {
+
+<button class="btn-registrar" (click)="habilitarFormularioRegistro()">
+    Registrar Usuario
+</button>
+
+<div class="listado-usuarios">
+    <div class="cabecera-usuarios">
+        <p>Nombre</p>
+        <p>Apellido</p>
+        <p>Mail</p>
+        <p>Acción</p>
+    </div>
+
+    @for(usuario of usuarios; track $index){
+
+    <div class="contenedor-info-usuario">
+        <p>{{usuario.nombre}}</p>
+        <p>{{usuario.apellido}}</p>
+        <p>{{usuario.correo}}</p>
+
+
+        <div class="acciones">
+
+            @if(usuario.active){
+            <button class="btn inhabilitar" (click)="inhabilitarUsuario(usuario)">
+                Inhabilitar Usuario
+            </button>
+
+            }@else {
+            <button class="btn habilitar" (click)="habilitarUsuario(usuario)">
+                Habilitar Usuario
+            </button>
+            }
+
+        </div>
+
+    </div>
+    }
+
+</div>
+}

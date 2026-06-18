@@ -32,4 +32,8 @@ export class CreateAutenticacionDto {
     @IsString()
     imagen?: string;
 
+    @IsOptional()
+    @IsString()
+    perfil?: string;
+
 }

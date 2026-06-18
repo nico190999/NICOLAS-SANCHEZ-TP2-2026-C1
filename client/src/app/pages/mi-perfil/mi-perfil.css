@@ -1,9 +1,73 @@
+.ordenar-por {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.ordenar-por p {
+    font-weight: bold;
+}
+
+
+.ordenar-por button,
+.paginacion button {
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    background: #333;
+    color: white;
+}
+
+
+.ordenar-por button:hover,
+.paginacion button:hover {
+    opacity: 0.8;
+}
+
+
+
+
+.lista-publicaciones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.preview-publicacion {
+    width: 260px;
+    overflow: hidden;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.preview-publicacion h3 {
+    margin: 12px;
+    font-size: 18px;
+}
+
+.preview-publicacion img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-publicacion span {
+    display: block;
+    margin: 12px;
+    color: #666;
+    font-size: 14px;
+}
+
 .personal-info {
     width: 350px;
     margin: 40px auto;
     padding: 25px;
     background: #ffffff;
-    border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
@@ -15,7 +79,6 @@
 .profile-image img {
     width: 150px;
     height: 150px;
-    border-radius: 50%;
     object-fit: cover;
     border: 4px solid #ddd;
     margin-bottom: 20px;

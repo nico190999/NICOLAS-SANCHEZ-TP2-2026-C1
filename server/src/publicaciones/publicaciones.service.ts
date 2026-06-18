@@ -12,7 +12,7 @@ export class PublicacionesService {
   ) { }
 
 
-  async publicar(createPublicacionDto: CreatePublicacionDto){
+  async publicar(createPublicacionDto: CreatePublicacionDto) {
 
     const publicacionCreada = await this.PublicacionModel.create(createPublicacionDto);
 
@@ -64,32 +64,46 @@ export class PublicacionesService {
     );
   }
 
-  async darLike( idPublicacion: string, usuarioId: string) {
+  async darLike(
+    idPublicacion: string,
+    usuarioId: string
+  ) {
+    const publicacion =
+      await this.PublicacionModel.findById(idPublicacion);
 
-    const publicacion = await this.PublicacionModel.findById(idPublicacion); //Busca la publicación
-
-    if (!publicacion) { //En caso que no encuentre la publicación, indica esto mismo y se termina la ejecución 
-      throw new Error(
-        'Publicación no encontrada'
-      );
+    if (!publicacion) {
+      throw new Error("Publicación no encontrada");
     }
+    // evitar likes duplicados
 
     if (publicacion.likes.includes(usuarioId)) {
-      return publicacion; //Chequea si el Id del usuario ya se encuentra en likes, en caso que si, no se hace nada. 
+
+      return {
+        mensaje: "Ya diste like"
+      };
+
     }
 
-    publicacion.likes.push(usuarioId); //Sin embargo, si no tiene el like del usuairo se le agrega con push al atributo "likes"
 
-    publicacion.cantidadLikes = publicacion.likes.length; //Actualiza cantidad de likes
 
-    await publicacion.save(); //Se guarda en MongoDb
+    // agregar like
 
-    return publicacion; // Devuelve la publicación
+    publicacion.likes.push(usuarioId);
+
+
+
+    publicacion.cantidadLikes =
+      publicacion.likes.length;
+
+
+
+    return await publicacion.save();
+
 
   }
 
 
-  async quitarLike(idPublicacion: string,usuarioId: string) {
+  async quitarLike(idPublicacion: string, usuarioId: string) {
 
     const publicacion = await this.PublicacionModel.findById(idPublicacion);
 
@@ -110,5 +124,9 @@ export class PublicacionesService {
 
     return publicacion;
 
+  }
+
+  async obtenerPublicacion(id: string) {
+    return await this.PublicacionModel.findById(id).exec();
   }
 }

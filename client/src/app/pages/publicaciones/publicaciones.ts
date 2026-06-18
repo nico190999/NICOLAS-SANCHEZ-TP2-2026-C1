@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
-import { Publicacion } from './publicacion/publicacion';
 import { ChangeDetectorRef } from '@angular/core';
 import { PeticionesPublicacionesservice } from './peticiones.publicaciones.service';
-import { AuthService } from '../../auth/services/auth-service';
+import { RouterLink } from '@angular/router';
+import { FormatoFechaPipe } from '../../pipes/formato-fecha-pipe';
+import { ResaltarDirective } from '../../directivas/resaltar';
+import { AgrandarLetraDirective } from '../../directivas/agrandar-letra';
 
 @Component({
   selector: 'app-publicaciones',
-  imports: [Publicacion],
+  imports: [RouterLink, FormatoFechaPipe, ResaltarDirective, AgrandarLetraDirective],
   standalone: true,
   templateUrl: './publicaciones.html',
+  styleUrl: './publicaciones.css',
 })
 export default class PublicacionesComponent {
   paginaActual = 1;
@@ -20,8 +23,7 @@ export default class PublicacionesComponent {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private peticiones: PeticionesPublicacionesservice,
-    private authService: AuthService
+    private peticiones: PeticionesPublicacionesservice
   ) { }
 
   ngOnInit() {
@@ -31,12 +33,14 @@ export default class PublicacionesComponent {
   ordenarPorFecha(){
     console.log("Entro a la función de ordenar por fecha")
     this.orden = 'fecha'
+    this.paginaActual = 1
     this.cargarPublicaciones();
   }
 
   ordenarPorLikes(){
     console.log("Entro a la función de ordenar por likes")
     this.orden = 'likes'
+    this.paginaActual = 1
     this.cargarPublicaciones();
   }
 
@@ -49,6 +53,7 @@ export default class PublicacionesComponent {
           this.publicaciones = resp.publicaciones;
           this.total = resp.total;
           this.cdr.detectChanges();
+          console.log(this.publicaciones)
         }
       });
   }

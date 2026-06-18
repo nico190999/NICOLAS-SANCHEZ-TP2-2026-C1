@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PublicacionesModule } from './publicaciones/publicaciones.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { AutenticacionModule } from './autenticacion/autenticacion.module';
+import { EstadisticasModule } from './estadisticas/estadisticas.module';
 
 
 @Module({
@@ -15,6 +16,7 @@ import { AutenticacionModule } from './autenticacion/autenticacion.module';
     UsuariosModule,
     AutenticacionModule,
     MongooseModule.forRoot(process.env.MONGO_URI!), // Conexión de mongo!
+    EstadisticasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

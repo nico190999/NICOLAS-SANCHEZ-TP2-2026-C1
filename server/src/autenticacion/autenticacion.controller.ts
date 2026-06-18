@@ -7,6 +7,7 @@ import { CreateAutenticacionDto } from "./dto/create-autenticacion.dto";
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { v2 as cloudinary } from 'cloudinary';
+import { BadRequestException } from "@nestjs/common";
 
 cloudinary.config({
   cloud_name: 'dbll45f5w',
@@ -30,8 +31,13 @@ export class AutenticacionController {
     /* console.log("DTO RECIBIDO:", dto); */
 
     const usuario = await this.usuarioService.buscarPorCorreo(dto.correo);
+
     if (!usuario) {
       throw new UnauthorizedException("Usuario no encontrado");
+    }
+
+    if (!usuario.active) {
+      throw new UnauthorizedException({ codigo: "USUARIO_INHABILITADO", mensaje: "El usuario se encuentra inhabilitado" });
     }
 
     /* console.log("USUARIO ENCONTRADO:", usuario); */
@@ -74,7 +80,6 @@ export class AutenticacionController {
       }),
     }),
   )
-
   async create(
     @UploadedFile() file: Express.Multer.File,
     @Body() createAutenticacionDto: CreateAutenticacionDto,
@@ -90,6 +95,34 @@ export class AutenticacionController {
     const token = this.authService.generarToken(usuario);
 
     return { token, usuario };
+  }
+
+  @Post('registroComoAdmin')
+  //Subir imagen
+  @UseInterceptors(
+    FileInterceptor('imagen', {
+      storage: new CloudinaryStorage({
+        cloudinary,
+        params: {
+          public_id: (req, file) =>
+            `IMG_${Date.now()}_archivos`,
+        },
+      }),
+    }),
+  )
+  async crear(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createAutenticacionDto: CreateAutenticacionDto,
+  ) {
+
+    if (file) {
+      createAutenticacionDto.imagen = file.path;
+    }
+    const usuario = await this.authService.registro(createAutenticacionDto);
+
+    console.log("Usuario generado", usuario)
+
+    return { usuario };
   }
 
 
@@ -108,14 +141,20 @@ export class AutenticacionController {
 
   @Post("refrescar")
   refrescar(@Body() body: any) {
+
+    console.log("BODY RECIBIDO REFRESH:");
+    console.log(body);
+
     try {
-      const payload = this.authService.validarToken(body.token);
+      const payload = this.authService.validarTokenSinFallo(body.token);
       const nuevoToken = this.authService.generarToken(payload);
       return {
         token: nuevoToken
       };
+
     } catch (error) {
-      console.log(error)
+      console.log("ERROR BACKEND REFRESH:");
+      console.log(error);
       throw new UnauthorizedException();
     }
   }

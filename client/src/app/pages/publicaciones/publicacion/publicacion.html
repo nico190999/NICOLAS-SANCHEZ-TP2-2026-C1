@@ -1,21 +1,23 @@
+@if(publicacion._id){
+
 <div class="publicacion">
 
     <div class="cabecera">
-        <h3>{{ nombreDeUsuario }}</h3>
-    </div>
-
-    <div class="detalles">
-        <span class="fecha">
-            {{ fecha }}
-        </span>
+        <h3>{{ publicacion.nombreDeUsuario }}</h3>
     </div>
 
     <div class="contenido">
 
-        @if (contenido) {
-        <img [src]="contenido" alt="Imagen de la publicación">
+        @if (publicacion.contenido) {
+        <img [src]="publicacion.contenido" alt="Imagen de la publicación">
         }
 
+    </div>
+
+    <div class="detalles">
+        <span class="fecha">
+            {{ publicacion.fecha | formatoFecha}}
+        </span>
     </div>
 
     <div class="interaccion-publicacion">
@@ -23,7 +25,7 @@
 
         <div class="contador-likes">
             <span>
-                {{ likes }} Me gusta
+                {{ publicacion.likes.length | contador}}
             </span>
         </div>
 
@@ -52,7 +54,7 @@
     <div class="descripcion-publicacion">
 
         <p>
-            {{ descripcion }}
+            {{ publicacion.descripcion }}
         </p>
 
     </div>
@@ -173,9 +175,10 @@
 
     </div>
 
-    @if(esMia()){
+    @if(esMia() || usuarioAdmin()){
     <button class="btn-eliminarPublicacion" (click)="eliminarPublicacion()">Eliminar Publicación
     </button>
     }
 
 </div>
+}

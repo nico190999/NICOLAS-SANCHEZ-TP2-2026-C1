@@ -102,7 +102,7 @@ export default class Registro {
         //Si sale todo bien se ejecuta el next
         next: (respuesta) => {
 
-          console.log('Se registro el Usuario en MongoDB. A continuación se ejecuta la respuesta', respuesta);
+          console.log('Se registro el Usuario en MongoDB');
           this.authService.guardarSesion(respuesta);
           this.authService.logueoExitoso = true;
           this.router.navigate(['/publicaciones']);

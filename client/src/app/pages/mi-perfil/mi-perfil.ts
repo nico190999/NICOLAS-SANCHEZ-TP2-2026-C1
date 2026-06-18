@@ -2,12 +2,16 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../auth/services/auth-service';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
-import { Publicacion } from '../publicaciones/publicacion/publicacion';
 import { PeticionesPublicacionesservice } from '../publicaciones/peticiones.publicaciones.service';
+import { RouterLink } from '@angular/router';
+import { FormatoFechaPipe } from '../../pipes/formato-fecha-pipe';
+import { CapitalizarPipe } from '../../pipes/capitalizar-pipe';
+import { HoverDirective } from '../../directivas/hover';
+import { AgrandarLetraDirective } from '../../directivas/agrandar-letra';
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [ReactiveFormsModule, Publicacion],
+  imports: [ReactiveFormsModule, RouterLink, FormatoFechaPipe, CapitalizarPipe, HoverDirective, AgrandarLetraDirective],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css',
 })

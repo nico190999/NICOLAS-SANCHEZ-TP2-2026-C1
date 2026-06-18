@@ -18,7 +18,7 @@ export class ComentariosController {
         @Query('offset') offset: string,
         @Query('limit') limit: string
     ) {
-        return this.comentariosService.obtenerComentarios( idPublicacion, Number(offset), Number(limit));
+        return this.comentariosService.obtenerComentarios(idPublicacion, Number(offset), Number(limit));
     }
 
     @Post()
@@ -33,5 +33,6 @@ export class ComentariosController {
     ) {
         return this.comentariosService.modificarComentario(idComentario, dtoMod);
     }
+
 
 }

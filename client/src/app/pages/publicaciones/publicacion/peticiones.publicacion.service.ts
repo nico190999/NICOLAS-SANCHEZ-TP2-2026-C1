@@ -23,11 +23,15 @@ export class PeticionesPublicacionservice {
         return this.http.delete(`${environment.apiUrl}/publicaciones/${idPublicacion}`)
     }
 
-    peticionDarLike(idPublicacion: string) {
-        const token = localStorage.getItem("token");
-        return this.http.post(`${environment.apiUrl}/publicaciones/${idPublicacion}/like`,{}, {headers:{
-            Authorization:`Bearer ${token}`
-        }});
+    peticionDarLike(idPublicacion: string, usuarioId: string) {
+
+        return this.http.post(
+            `${environment.apiUrl}/publicaciones/${idPublicacion}/like`,
+            {
+                usuarioId
+            }
+        );
+
     }
 
     peticionQuitarLike(idPublicacion: string, usuarioId: any) {
@@ -36,6 +40,10 @@ export class PeticionesPublicacionservice {
 
     peticionModificarComentario(idComentario: string, mensaje: string) {
         return this.http.put(`${environment.apiUrl}/comentarios/${idComentario}`, { mensaje });
+    }
+
+    peticionCargarPublicacion(IdPublicacion: string) {
+        return this.http.get<any>(`${environment.apiUrl}/publicaciones/publicacion/${IdPublicacion}`)
     }
 
 }

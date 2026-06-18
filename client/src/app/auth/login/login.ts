@@ -5,11 +5,14 @@ import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { ChangeDetectorRef } from '@angular/core';
+import { ResaltarDirective } from '../../directivas/resaltar';
+import { SesionService } from '../services/sesion.service';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ResaltarDirective],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -17,9 +20,13 @@ export default class Login {
 
   router = inject(Router);
 
+  usuarioInhabilitado = false;
+
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private sesionService: SesionService
   ) { }
 
   formulario = new FormGroup({
@@ -42,11 +49,19 @@ export default class Login {
           console.log('Respuesta login', respuesta);
           this.authService.guardarSesion(respuesta);
           this.authService.logueoExitoso = true;
+          this.usuarioInhabilitado = false;
+          this.sesionService.iniciarContador();
           this.router.navigate(['/publicaciones']);
         },
-
         error: (error) => {
-          console.log('Error de login', error);
+          /* console.log('Error de login', error); */
+
+          if (error.error.codigo === "USUARIO_INHABILITADO") {
+            console.log("Entre en usuario inhabilitado");
+            this.usuarioInhabilitado = true;
+            this.cdr.detectChanges();
+
+          }
         }
       });
   }
@@ -59,39 +74,11 @@ export default class Login {
     this.formulario.patchValue({ correo: "nico1@gmail.com", contrasenia: "nico1" })
   }
 
-
-
-  //---------------------------SUBIR IMAGEN ------------
-  archivoSeleccionado!: File;
-
-  seleccionarArchivo(event: Event) {
-    const input = event.target as HTMLInputElement;
-
-    if (input.files?.length) {
-      this.archivoSeleccionado = input.files[0];
-    }
+  loginRapidoAdmin() {
+    this.formulario.patchValue({ correo: "admin@gmail.com", contrasenia: "admin" })
   }
 
-  subir() {
-    const formData = new FormData();
 
-    formData.append('archivo', this.archivoSeleccionado);
-
-    this.http.post<{ url: string }>(
-      'http://localhost:3000/publicaciones/subirImagen',
-      formData
-    )
-      .subscribe({
-        next: (resp) => {
-          console.log(resp.url);
-        },
-        error: (err) => {
-          console.error(err);
-        }
-      });
-  }
-
-  //---------------------------SUBIR IMAGEN ------------
 
 }
 

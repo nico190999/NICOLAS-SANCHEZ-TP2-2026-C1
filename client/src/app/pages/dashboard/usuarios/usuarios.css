@@ -1,0 +1,259 @@
+.listado-usuarios {
+    width: 90%;
+    margin: 30px auto;
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Cabecera */
+
+.cabecera-usuarios,
+.contenedor-info-usuario {
+    display: grid;
+    grid-template-columns:
+        1fr 1fr 2fr 1fr;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+
+
+/* Encabezado */
+
+.cabecera-usuarios {
+    background: #222;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+.cabecera-usuarios p {
+    margin: 0;
+}
+
+
+
+/* Filas */
+
+.contenedor-info-usuario {
+    border-bottom: 1px solid #ddd;
+    transition: background 0.2s;
+}
+
+
+.contenedor-info-usuario:hover {
+    background: #f7f7f7;
+}
+
+
+
+.contenedor-info-usuario p {
+    margin: 0;
+    color: #333;
+}
+
+
+
+/* Botones */
+
+.acciones {
+    display: flex;
+    justify-content: center;
+}
+
+
+.btn {
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+
+
+.habilitar {
+    background: #2ecc71;
+    color: white;
+}
+
+
+.inhabilitar {
+    background: #e74c3c;
+    color: white;
+}
+
+
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 350px;
+    background-color: #fff;
+    padding: 20px;
+}
+
+/* Título */
+.title {
+    font-size: 20px;
+    color: royalblue;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Texto inferior */
+.signin {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.signin a {
+    color: royalblue;
+}
+
+/* LABEL */
+.form label {
+    position: relative;
+    display: block;
+}
+
+/* INPUT BASE */
+.form label .input {
+    width: 100%;
+    padding: 12px 10px;
+    border: 2px solid #ccc;
+    outline: none;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+/* FOCUS */
+.form label .input:focus {
+    border-color: #4fc3f7;
+}
+
+/* TEXTO FLOTANTE */
+.form label span {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    color: gray;
+    font-size: 13px;
+    transition: 0.2s;
+    pointer-events: none;
+}
+
+/* Animación label */
+.form label .input:focus+span,
+.form label .input:not(:placeholder-shown)+span {
+    top: -8px;
+    font-size: 11px;
+    background: white;
+    padding: 0 4px;
+}
+
+/* ✅ INPUT ERROR */
+.input.error {
+    border-color: #ff4d4d;
+    background-color: #fff5f5;
+}
+
+/* TEXTO ERROR */
+.error-text {
+    color: #ff4d4d;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* BOTÓN */
+.submit {
+    border: none;
+    background-color: royalblue;
+    padding: 10px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.submit:hover {
+    background-color: rgb(56, 90, 194);
+}
+
+.submit:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+
+
+
+
+.campo-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.campo-perfil label {
+    color: #555;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.select-perfil {
+    width: 100%;
+    padding: 12px 10px;
+    border: 2px solid #ccc;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+}
+
+
+.select-perfil:focus {
+    border-color: #4fc3f7;
+}
+
+
+.btn-volver {
+    margin-top: 15px;
+    width: 350px;
+    padding: 10px;
+    border: none;
+    background: #555;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-registrar {
+    display: block;
+    margin: 30px auto;
+    padding: 12px 25px;
+    border: none;
+    background: rgb(22, 233, 92);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}

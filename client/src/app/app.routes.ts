@@ -18,5 +18,17 @@ export const routes: Routes = [
     {
         path:"publicaciones",
         loadComponent: () =>import("./pages/publicaciones/publicaciones")
+    },
+    {
+        path:"publicaciones/:IdPublicacion",
+        loadComponent: () =>import("./pages/publicaciones/publicacion/publicacion")
+    },
+    {
+        path:"usuarios",
+        loadComponent: () =>import("./pages/dashboard/usuarios/usuarios")
+    },
+    {
+        path:"estadisticas",
+        loadComponent: () =>import("./pages/dashboard/estadisticas/estadisticas")
     }
 ];

@@ -26,6 +26,18 @@
     Mi perfil
   </button>
 
+  @if(authService.usuarioLogueado?.perfil == "administrador"){
+
+  <button routerLink="usuarios">
+    Usuarios
+  </button>
+
+  <button routerLink="estadisticas">
+    Estadisticas
+  </button>
+
+  }
+
 
   <button (click)="cerrarSesion()">
     Cerrar sesión
@@ -58,7 +70,48 @@
 }
 
 
-<router-outlet></router-outlet>
+@if(sesionService.mostrarModal){
+
+
+<div class="modal-sesion">
+
+  <div class="contenido-modal">
+
+    <h2>
+      Sesión próxima a vencer
+    </h2>
+
+
+    <p>
+      Quedan 5 minutos de sesión.
+      ¿Desea extender la sesión?
+    </p>
+
+
+    <button (click)="extenderSesion()">
+      Extender sesión
+    </button>
+
+
+    <button (click)="cerrarSesion()">
+      Cerrar sesión
+    </button>
+
+
+  </div>
+
+</div>
+
+
+}
+
+
+
+<div class="router-outlet-class">
+
+  <router-outlet></router-outlet>
+
+</div>
 
 
 }

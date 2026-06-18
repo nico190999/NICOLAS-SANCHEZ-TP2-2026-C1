@@ -13,12 +13,12 @@
 
         <p>
             <strong>Nombre:</strong>
-            <span>{{usuario?.nombre}}</span>
+            <span>{{usuario?.nombre | capitalizar}}</span>
         </p>
 
         <p>
             <strong>Apellido:</strong>
-            <span>{{usuario?.apellido}}</span>
+            <span>{{usuario?.apellido | capitalizar}}</span>
         </p>
 
         <p>
@@ -41,21 +41,27 @@
     <button (click)="habilitarFormularioDePublicacion()">Crear Publicación</button>
 </div>
 
-<div class="contenedor-publicaciones">
+<div appHover class="lista-publicaciones">
 
     @for(publicacion of publicaciones; track $index){
 
-        <app-publicacion
-            [idPublicacion]="publicacion._id"
-            [idUsuario]="publicacion.idUsuario"
-            [nombreDeUsuario]="publicacion.nombreDeUsuario"
-            [contenido]="publicacion.contenido"
-            [fecha]="publicacion.fecha"
-            [likes]="publicacion.likes.length"
-            [usuariosLikes]="publicacion.likes"
-            [descripcion]="publicacion.descripcion"
-            [comentarios]="publicacion.comentarios.length">
-        </app-publicacion>
+        <div class="preview-publicacion" [routerLink]="['/publicaciones', publicacion._id]">
+
+        <h3 appAgrandarLetra>
+            {{publicacion.nombreDeUsuario}}
+        </h3>
+
+        <img [src]="publicacion.contenido" alt="imagen publicacion">
+
+        <span>
+            Likes: {{publicacion.likes.length}}
+        </span>
+
+        <span>
+            {{publicacion.fecha | formatoFecha}}
+        </span>
+
+    </div>
 
     }
 

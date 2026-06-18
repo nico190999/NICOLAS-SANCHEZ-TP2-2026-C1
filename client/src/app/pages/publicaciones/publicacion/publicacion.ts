@@ -5,20 +5,25 @@ import { ɵInternalFormsSharedModule, ReactiveFormsModule, FormGroup, FormContro
 import { OnInit } from '@angular/core';
 import { PeticionesPublicacionservice } from './peticiones.publicacion.service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { FormatoFechaPipe } from '../../../pipes/formato-fecha-pipe';
+import { ContadorPipe } from '../../../pipes/contador-pipe';
+
 
 @Component({
   selector: 'app-publicacion',
   standalone: true,
-  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule],
+  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule, FormatoFechaPipe, ContadorPipe],
   templateUrl: './publicacion.html',
   styleUrl: './publicacion.css',
 })
-export class Publicacion implements OnInit {
+export default class Publicacion implements OnInit {
 
   constructor(
     public authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private peticiones: PeticionesPublicacionservice
+    private peticiones: PeticionesPublicacionservice,
+    private route: ActivatedRoute
   ) { };
 
   @Input()
@@ -28,25 +33,7 @@ export class Publicacion implements OnInit {
   idUsuario: any;
 
   @Input()
-  nombreDeUsuario: any;
-
-  @Input()
-  contenido: any;
-
-  @Input()
-  fecha: any;
-
-  @Input()
-  likes: any;
-
-  @Input()
   usuariosLikes: string[] = [];
-
-  @Input()
-  descripcion: any;
-
-  @Input()
-  comentarios: any;
 
   listaComentarios: any[] = [];
 
@@ -58,10 +45,39 @@ export class Publicacion implements OnInit {
 
   aniadirComentarioFlag = false;
 
+  publicacion: any = {
+    likes: []
+  };
+
   ngOnInit() {
 
-    this.cargarComentariosIniciales();
+    console.log("Entro en el ngOninit")
 
+    this.cargarPublicacion();
+
+  }
+
+  cargarPublicacion() {
+    const id = this.route.snapshot.paramMap.get('IdPublicacion');
+    console.log(id)
+
+    if (id) {
+      this.peticiones.peticionCargarPublicacion(id)
+        .subscribe({
+          next: (respuesta) => {
+            this.publicacion = respuesta;
+            // guardamos datos necesarios para botones y comentarios
+            this.idPublicacion = respuesta._id;
+            this.idUsuario = respuesta.idUsuario;
+            this.usuariosLikes = respuesta.likes || [];
+            console.log(this.publicacion);
+            this.cargarComentariosIniciales();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        });
+    }
   }
 
   formularioComentario = new FormGroup({
@@ -141,7 +157,7 @@ export class Publicacion implements OnInit {
     });
   }
 
-  /* darLike() {
+  darLike() {
     const usuarioId =
       this.authService.usuarioLogueado?._id;
     if (!usuarioId) {
@@ -152,20 +168,9 @@ export class Publicacion implements OnInit {
       .subscribe({
         next: () => {
           console.log("Likeaste la publicación")
+          this.usuariosLikes.push(usuarioId);
+          this.publicacion.likes = this.usuariosLikes;
           this.cdr.detectChanges()
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      });
-  } */
-
-  darLike() {
-    this.peticiones.peticionDarLike(this.idPublicacion)
-      .subscribe({
-        next: () => {
-          console.log("Likeaste la publicación");
-          this.cdr.detectChanges();
         },
         error: (err) => {
           console.log(err);
@@ -184,6 +189,11 @@ export class Publicacion implements OnInit {
       .subscribe({
         next: () => {
           console.log("Quitaste el like a la publicación")
+          this.usuariosLikes =
+            this.usuariosLikes.filter(
+              id => id !== usuarioId
+            );
+          this.publicacion.likes = this.usuariosLikes;
           this.cdr.detectChanges()
         },
         error: (err) => {
@@ -233,23 +243,22 @@ export class Publicacion implements OnInit {
   }
 
   esMia(): boolean {
-
     return this.authService.usuarioLogueado?._id === this.idUsuario;
+  }
 
+  usuarioAdmin(): boolean {
+    return this.authService.usuarioLogueado?.perfil == "administrador";
   }
 
   usuarioYaDioLike(): boolean {
-
     const usuarioId =
       this.authService.usuarioLogueado?._id;
 
     if (!usuarioId) {
       return false;
     }
-
     return this.usuariosLikes.includes(usuarioId);
   }
-
   cargarMasComentarios() {
     this.cargarComentarios();
   }
