@@ -133,3 +133,15 @@
 #usuario-inhabilitado{
     color: red;
 }
+
+.btn-login-rapido{
+    background-color: #5a0f1f; /* bordo oscuro */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
