@@ -4,29 +4,40 @@ import { Get, Query } from '@nestjs/common';
 
 @Controller('estadisticas')
 export class EstadisticasController {
-  constructor(private readonly estadisticasService: EstadisticasService) {}
+  constructor(private readonly estadisticasService: EstadisticasService) { }
 
   @Get("publicaciones")
-    obtenerPublicaciones(
-      @Query("desde") desde: string,
-      @Query("hasta") hasta: string
-    ) {
-      return this.estadisticasService.publicacionesPorUsuario(
-        new Date(desde),
-        new Date(hasta)
-      );
-    }
+  obtenerPublicaciones(
+    @Query("desde") desde: string,
+    @Query("hasta") hasta: string
+  ) {
+    return this.estadisticasService.publicacionesPorUsuario(
+      new Date(desde),
+      new Date(hasta)
+    );
+  }
 
-    @Get("comentarios")
-    obtenerComentariosEstadistica(
-        @Query("desde") desde: string,
-        @Query("hasta") hasta: string
-    ) {
+  @Get("comentarios")
+  obtenerComentariosEstadistica(
+    @Query("desde") desde: string,
+    @Query("hasta") hasta: string
+  ) {
 
-        return this.estadisticasService.comentariosPorPublicacion(
-            new Date(desde),
-            new Date(hasta)
-        );
+    return this.estadisticasService.comentariosPorPublicacion(
+      new Date(desde),
+      new Date(hasta)
+    );
 
-    }
+  }
+
+  @Get("cantidad-comentarios")
+  obtenerCantidadComentarios(
+    @Query("desde") desde: string,
+    @Query("hasta") hasta: string
+  ) {
+    return this.estadisticasService.cantidadComentariosPorFecha(
+      new Date(desde),
+      new Date(hasta)
+    );
+  }
 }

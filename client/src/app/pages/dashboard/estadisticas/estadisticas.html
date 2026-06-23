@@ -9,18 +9,14 @@
             Desde:
         </label>
 
-        <input 
-            type="date"
-            [(ngModel)]="desde">
+        <input type="date" [(ngModel)]="desde">
 
 
         <label>
             Hasta:
         </label>
 
-        <input 
-            type="date"
-            [(ngModel)]="hasta">
+        <input type="date" [(ngModel)]="hasta">
 
 
         <button (click)="cargarEstadisticas()">
@@ -53,6 +49,14 @@
 
             <canvas id="graficoComentarios"></canvas>
 
+        </div>
+
+        <div class="grafico">
+            <h3>
+                Cantidad de comentarios por fecha
+            </h3>
+
+            <canvas id="graficoCantidadComentarios"></canvas>
         </div>
 
 

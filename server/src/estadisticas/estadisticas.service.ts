@@ -78,5 +78,48 @@ export class EstadisticasService {
         ]);
     }
 
-    
+    async cantidadComentariosPorFecha(desde: Date, hasta: Date) {
+
+        hasta.setHours(23, 59, 59, 999);
+
+        return this.comentarioModel.aggregate([
+            {
+                $addFields: {
+                    fechaConvertida: {
+                        $dateFromString: {
+                            dateString: "$fecha"
+                        }
+                    }
+                }
+            },
+            {
+                $match: {
+                    fechaConvertida: {
+                        $gte: desde,
+                        $lte: hasta
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        $dateToString: {
+                            format: "%Y-%m-%d",
+                            date: "$fechaConvertida"
+                        }
+                    },
+                    cantidad: {
+                        $sum: 1
+                    }
+                }
+            },
+            {
+                $sort: {
+                    _id: 1
+                }
+            }
+        ]);
+    }
+
+
 }

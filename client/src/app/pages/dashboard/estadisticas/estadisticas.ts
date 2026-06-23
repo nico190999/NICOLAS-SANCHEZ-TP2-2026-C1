@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -28,6 +28,7 @@ export default class Estadisticas {
 
 
   cargarEstadisticas() {
+
     this.http.get<any[]>(
       `${environment.apiUrl}/estadisticas/publicaciones?desde=${this.desde}&hasta=${this.hasta}`
     )
@@ -67,8 +68,26 @@ export default class Estadisticas {
           }
         })
       })
+
+
+    this.http.get<any[]>(
+      `${environment.apiUrl}/estadisticas/cantidad-comentarios?desde=${this.desde}&hasta=${this.hasta}`
+    )
+      .subscribe(datos => {
+        console.log("CANTIDAD COMENTARIOS:", datos);
+
+        new Chart("graficoCantidadComentarios", {
+          type: 'bar',
+          data: {
+            labels: datos.map(x => x._id),
+            datasets: [{
+              label: 'Cantidad de comentarios',
+              data: datos.map(x => x.cantidad)
+            }]
+          }
+        });
+      });
+
   }
-
-
 
 }
